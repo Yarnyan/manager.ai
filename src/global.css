@@ -1,0 +1,97 @@
+@import url('https://fonts.googleapis.com/css2?family=Onest:wght@100..900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bgColor: #18181b;
+  --sideBarColor: #131316;
+  --textColor: #fafafa;
+  --mutedTextColor: #a2a2ac;
+  --iconColor: #a2a2ac;
+  --hoverColor: #202024;
+  --bgElements: #202024;
+  --borderColor: #26272b;
+}
+
+/* Стиль для прокрутки в веб-кит браузерах */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--sideBarColor); /* Цвет трека */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--hoverColor); /* Цвет ползунка */
+  border-radius: 6px;
+  border: 3px solid var(--sideBarColor); /* Делает эффект впадины */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--borderColor); /* Цвет ползунка при наведении */
+}
+
+/* Для Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--hoverColor) var(--sideBarColor);
+}
+
+
+@media (prefers-color-scheme: dark) {
+
+}
+
+body {
+  font-family: "Onest", sans-serif;
+  position: relative;
+  width: 100%;
+  color: var(--textColor);
+}
+
+.swiper-banners-button-prev,
+.swiper-banners-button-next {
+  color: #a5a5a7 !important;
+  cursor: pointer;
+}
+
+.swiper-banners-button-prev svg,
+.swiper-banners-button-next svg {
+  width: 24px;
+  height: 24px;
+}
+
+.swiper-bannersRec-button-prev,
+.swiper-bannersRec-button-next {
+  color: #a5a5a7 !important;
+  cursor: pointer;
+}
+
+.swiper-bannersRec-button-prev svg,
+.swiper-bannersRec-button-next svg {
+  width: 24px;
+  height: 24px;
+}
+
+.swiper-slide-banners {
+
+}
+
+.mySwiper {
+  height: 100% !important;
+}
+
+@media (max-width: 768px) {
+  .swiper-slide-banners {
+    width: 100% !important; 
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
