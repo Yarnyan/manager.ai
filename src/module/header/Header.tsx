@@ -1,14 +1,16 @@
 import AvatarContainer from '../../components/ui/AvatarBurger';
 import { useState, useEffect } from 'react'
 import Typewriter from 'typewriter-effect';
+import { useLocation } from 'react-router-dom';
 type Props = {
-    openRegModal: () => void,
-    openLogModal: () => void
+    openRegModal?: () => void,
+    openLogModal?: () => void
 }
 
 export default function Header({ openRegModal, openLogModal }: Props) {
 
     const [token, setToken] = useState<boolean | null>(null);
+    const location = useLocation();
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -17,7 +19,7 @@ export default function Header({ openRegModal, openLogModal }: Props) {
         } else {
             setToken(false);
         }
-    }, []);
+    }, [location]);
 
     if (token === null) {
         return null;
@@ -29,7 +31,7 @@ export default function Header({ openRegModal, openLogModal }: Props) {
                 <h1 className="text-xl font-normal text-[var(--mutedTextColor)] sm:hidden">
                     <Typewriter
                         options={{
-                            strings: ['Добро пожаловать'], //Yarnyan
+                            strings: ['Welcome to manager AI'], //Yarnyan
                             autoStart: true,
                             loop: false,
                             delay: 75,

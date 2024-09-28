@@ -1,5 +1,4 @@
 import SideBar from './module/sidebar/SideBar';
-
 export default function RootLayout({
   children,
 }: Readonly<{

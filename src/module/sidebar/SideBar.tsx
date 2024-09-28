@@ -45,17 +45,17 @@ export default function SideBar({ }: Props) {
           </div>
           <Link to={'/create'} onClick={toggleSidebar} className='mt-4 text-s font-normal bg-[#26272b] h-[40px] rounded-2xl text-[var(--textColor)] hover:bg-[var(--hoverColor)] duration-300 flex items-center p-4 justify-center'>
             <RiMagicLine />
-            <p className='ml-1'>Создать</p>
+            <p className='ml-1'>Create</p>
           </Link>
-          <div>
+          {/* <div>
             <input type='text' placeholder='Поиск персонажей' className='border-0 outline-0 p-[10px] h-[40px] text-[var(--textColor)] bg-[#303136] rounded mt-4 w-full' />
-          </div>
-          <h1 className='mt-4 text-m font-normal text-[var(--mutedTextColor)]'>Вы пробовали</h1>
-          <div className='mt-2 max-h-[100%] overflow-y-auto'>
+          </div> */}
+          {/* <h1 className='mt-4 text-m font-normal text-[var(--mutedTextColor)]'>Вы пробовали</h1> */}
+          {/* <div className='mt-2 max-h-[100%] overflow-y-auto'>
             {banners.map((banner) => (
               <SidebarBanner key={banner.id} image={banner.img} name={banner.name} closeBanner={toggleSidebar} />
             ))}
-          </div>
+          </div> */}
         </div>
         <div className='m-5 z-10 ml-1'>
           {token ? (

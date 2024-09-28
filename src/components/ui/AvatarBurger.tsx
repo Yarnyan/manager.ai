@@ -6,7 +6,7 @@ import MenuItem from '@mui/material/MenuItem';
 import { Link } from 'react-router-dom';
 import { CiUser } from "react-icons/ci";
 import { IoIosLogOut } from "react-icons/io";
-
+import { useNavigate } from 'react-router-dom';
 type Props = {
   src?: string
 }
@@ -14,6 +14,7 @@ type Props = {
 export default function AvatarContainer({ src }: Props) {
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const navigate = useNavigate()
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -21,6 +22,11 @@ export default function AvatarContainer({ src }: Props) {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const logout = () => {
+    localStorage.clear()
+    navigate('/')
+  }
 
   return (
     <div>
@@ -54,11 +60,11 @@ export default function AvatarContainer({ src }: Props) {
       >
         <MenuItem onClick={handleClose}>
           <CiUser fill='var(--textColor)'/>
-          <Link to={`/profile/${'yarnyan'}`} className='ml-2 text-[var(--textColor)] text-m font-normal'>Профиль</Link>
+          <Link to={`/profile`} className='ml-2 text-[var(--textColor)] text-m font-normal'>Profile</Link>
         </MenuItem>
         <MenuItem onClick={handleClose}>
           <IoIosLogOut fill='var(--textColor)'/>
-          <p className='ml-2 text-[var(--textColor)] text-m font-normal'>Выйти</p>
+          <button className='ml-2 text-[var(--textColor)] text-m font-normal' onClick={logout}>Logout</button>
         </MenuItem>
       </Menu>
     </div>

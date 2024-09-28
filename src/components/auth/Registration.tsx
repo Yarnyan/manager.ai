@@ -1,3 +1,4 @@
+import {useState} from 'react' 
 import { forwardRef } from 'react';
 import { Box } from '@mui/material';
 import { styleModal } from '../modal/modal';
@@ -9,18 +10,25 @@ import { CiUser } from "react-icons/ci";
 import { MdOutlineEmail } from "react-icons/md";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { useNavigate } from 'react-router';
+import { useSignUpMutation } from './api/auth';
+import { isApiError } from '../../helpers/auth/apiError';
 type Props = {
   onCloseRegModal: () => void;
 };
 
 type Inputs = {
-  login: string;
-  email: string;
-  password: string;
+  login?: string;
+  email?: string;
+  password?: string;
 };
 
 const Registration = forwardRef<HTMLDivElement, Props>(({ onCloseRegModal }, ref) => {
+
+  const [signUp] = useSignUpMutation();
+  const [error, setError] = useState('');
+
   const navigate = useNavigate();
+
   const schema = yup.object().shape({
     login: yup.string().required(),
     email: yup.string().email().required(),
@@ -36,12 +44,27 @@ const Registration = forwardRef<HTMLDivElement, Props>(({ onCloseRegModal }, ref
     resolver: yupResolver(schema),
   });
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log(data);
-    localStorage.setItem('token', '123');
-    reset();
-    navigate('/profile/yarnyan');
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    try {
+
+      const formData = new FormData();
+      formData.append("login", data.login);
+      formData.append("email", data.email);
+      formData.append("password", data.password);
+
+      const response = await signUp(formData).unwrap();
+      
+      reset();
+      onCloseRegModal()
+    } catch (error) {
+      if (isApiError(error)) {
+        setError(error.data.message);
+      } else {
+        setError('Error signing in');
+      }
+    }
   };
+  
 
   return (
     <Box ref={ref} sx={{ ...styleModal }} tabIndex={0}>
@@ -75,8 +98,9 @@ const Registration = forwardRef<HTMLDivElement, Props>(({ onCloseRegModal }, ref
         </div>
         {errors.password && <p className='text-red-500 text-sm mt-[-10px]'>{errors.password.message}</p>}
         <div className='flex justify-center'>
-          <input type="submit" className='p-2.5 bg-[#F5F5F5] rounded-2xl text-l font-normal text-[#000000] hover:bg-[#d3d3d6] duration-300 w-max cursor-pointer' value={'Продолжить'} />
+          <input type="submit" className='p-2.5 min-w-[120px] bg-[#F5F5F5] rounded-2xl text-l font-normal text-[#000000] hover:bg-[#d3d3d6] duration-300 w-max cursor-pointer' value={'Continue'} />
         </div>
+        {error && <p className='text-red-500 text-l mt-[-10px] text-center'>{error}</p>}
       </form>
     </Box>
   );

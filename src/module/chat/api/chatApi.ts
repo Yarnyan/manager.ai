@@ -5,18 +5,23 @@ const chatApi = api.injectEndpoints({
         getAllMessage: build.query<any, unknown>({
             query: () => (
                 {
-                    url: '/todos/2',
+                    url: '/Chat/getChats',
                 }),
         }),
         sendMessage: build.mutation<IMessage, any>({
             query: (data) => ({
-                url: 'bot',
+                url: '/Chat/sendMessage',
                 method: 'POST',
                 body: data
+            }),
+        }),
+        getChats: build.query<any, any>({
+            query: () => ({
+                url: '/Chat/getChats',
             }),
         })
     }),
     overrideExisting: false,
 })
 
-export const { useLazyGetAllMessageQuery, useSendMessageMutation } = chatApi
+export const { useGetAllMessageQuery, useSendMessageMutation, useLazyGetChatsQuery } = chatApi

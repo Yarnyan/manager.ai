@@ -8,6 +8,8 @@ import Banner from '../../components/Banner/Banner';
 import { IoIosArrowForward } from "react-icons/io";
 import { IoIosArrowBack } from "react-icons/io";
 import { useMediaQuery } from 'usehooks-ts';
+import { useAppSelector } from '../../store/hooks';
+import React, { useEffect } from 'react';
 type Props = {}
 
 
@@ -18,9 +20,12 @@ const navigation = {
 }
 export default function BannerRec({ }: Props) {
   const mobile = useMediaQuery('(min-width: 768px)')
+
+  const bots = useAppSelector((state) => state.bots.allBots);
+
   return (
     <div className='mt-16 sm:mt-8 z-1'>
-      <h1 className='text-xl font-normal text-[var(--textColor)]'>Рекомендуемые</h1>
+      <h1 className='text-xl font-normal text-[var(--textColor)]'>Recommended</h1>
       <div className='mt-4 w-full relative z-1'>
         <Swiper
           slidesPerView={mobile ? 3 : 1}
@@ -28,12 +33,12 @@ export default function BannerRec({ }: Props) {
           navigation={navigation}
           modules={[Navigation, Autoplay]}
           className="mySwiper"
-          // autoplay={{ delay: 3000, disableOnInteraction: false }}
+          autoplay={{ delay: 3000, disableOnInteraction: false }}
         >
-          {banners.map((banner) => {
+          {bots.slice(4, 100000).map((banner) => {
             return (
               <SwiperSlide key={banner.id} className='swiper-slide-banners h-full pr-2 last:pr-0 z-1'>
-                <Banner img={banner.img} author={banner.author} name={banner.name} description={banner.description} />
+                <Banner id={banner.id} img={''} botname={banner.botname} description={banner.description} />
               </SwiperSlide>
             )
           })
