@@ -1,16 +1,18 @@
 
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
-export const api = createApi({
-    reducerPath: 'api',
+export const chatApi = createApi({
+    reducerPath: 'chatApi',
     baseQuery: fetchBaseQuery({
-      baseUrl: 'http://127.0.0.1:8444/api',
+      baseUrl: 'http://127.0.0.1:8443/',
       prepareHeaders: (headers) => {
         const token = localStorage.getItem('token');
         if (token) {
           headers.set('authorization', `Bearer ${token}`);
         }
         headers.set("ngrok-skip-browser-warning", "*");
+        headers.set('Accept', '*/*');
+        headers.set('Access-Control-Allow-Origin', '*',)
         return headers;
       },
     }),
@@ -18,4 +20,4 @@ export const api = createApi({
     endpoints: () => ({}),
   });
 
-export const { } = api
+export const { } = chatApi

@@ -1,27 +1,29 @@
 import { api } from "../../../api/api"
 import { IMessage } from "../entity/entity"
-const chatApi = api.injectEndpoints({
+import { chatApi } from "../../../api/chatApi"
+
+const socketApi = chatApi.injectEndpoints({
     endpoints: (build) => ({
         getAllMessage: build.query<any, unknown>({
             query: () => (
                 {
-                    url: '/Chat/getChats',
+                    url: '/chat/getChats',
                 }),
         }),
         sendMessage: build.mutation<IMessage, any>({
             query: (data) => ({
-                url: '/Chat/sendMessage',
+                url: '/chat/sendMessage',
                 method: 'POST',
                 body: data
             }),
         }),
         getChats: build.query<any, any>({
             query: () => ({
-                url: '/Chat/getChats',
+                url: '/chat/getChats',
             }),
         })
     }),
     overrideExisting: false,
 })
 
-export const { useGetAllMessageQuery, useSendMessageMutation, useLazyGetChatsQuery } = chatApi
+export const { useGetAllMessageQuery, useSendMessageMutation, useLazyGetChatsQuery } = socketApi

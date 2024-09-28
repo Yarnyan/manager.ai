@@ -22,9 +22,10 @@ const navigation = {
 
 export default function Banners({ }: Props) {
   const [getPublicBots, {data: bots, isLoading}] = useLazyGetPublicBotsQuery();
+  
   const dispatch = useAppDispatch();
   const mobile = useMediaQuery('(min-width: 768px)');
-  console.log(bots)
+
   useEffect(() => {
     try {
       getPublicBots(null).then((res) => {

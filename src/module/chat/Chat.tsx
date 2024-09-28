@@ -8,7 +8,7 @@ import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signal
 import { IMessage } from './entity/entity';
 import { useAppSelector } from '../../store/hooks';
 import { useLazyGetChatsQuery, useSendMessageMutation } from './api/chatApi';
-
+import { isApiError } from '../../helpers/auth/apiError';
 
 export default function Chat() {
   const chatRef = useRef<HTMLDivElement>(null);
@@ -32,13 +32,16 @@ export default function Chat() {
         console.log(res)
       })
     } catch (error) {
-
+      if(error) {
+        console.log(error)
+        console.log(isApiError(error))
+      }
     }
   }, []);
 
     useEffect(() => {
       const connection = new HubConnectionBuilder()
-          .withUrl('/chat/hub', {
+          .withUrl('http://127.0.0.1:8443/chat/hub', {
               accessTokenFactory: () => Promise.resolve(token || '')
           })
           .configureLogging(LogLevel.Information)
@@ -48,7 +51,7 @@ export default function Chat() {
           .then(() => console.log('Connection started'))
           .catch(error => console.log('Error establishing connection', error));
 
-      connection.on('Receive', (message: string, userId: number, chatId: number, timeSpan: string) => {
+      connection.on('ReceiveMessage', (message: string, userId: number) => {
           setMessages((prevMessages: any) => {
               return [
                   ...prevMessages,

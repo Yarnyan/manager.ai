@@ -18,7 +18,7 @@ function App() {
       connectEnabled={!!token}
       accessTokenFactory={() => token}
       dependencies={[token]}
-      url={'http://127.0.0.1:8444/'}
+      url={'http://127.0.0.1:8443/chat/hub'}
     >
       <BrowserRouter>
         <RootLayout>
