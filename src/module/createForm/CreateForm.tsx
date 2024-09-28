@@ -56,7 +56,7 @@ const CreateForm = ({ }) => {
             if (isApiError(error)) {
                 setError(error.data.message);
             } else {
-                setError('Error signing in');
+                setError('Invalid error');
             }
         }
     };

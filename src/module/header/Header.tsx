@@ -49,10 +49,10 @@ export default function Header({ openRegModal, openLogModal }: Props) {
                 ) : (
                     <div>
                         <button className='p-2 bg-[#F5F5F5] rounded-2xl text-l font-normal text-[#000000] hover:bg-[#d3d3d6] duration-300' onClick={openRegModal}>
-                            Регистрация
+                            Registration
                         </button>
                         <button className='ml-2 text-l font-normal hover:text-[var(--mutedTextColor)] duration-300' onClick={openLogModal}>
-                            Вход
+                            Login
                         </button>
                     </div>
                 )}

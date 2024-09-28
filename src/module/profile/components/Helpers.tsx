@@ -5,6 +5,7 @@ import { formatText } from "../../../helpers/text/formatText";
 import { useAppDispatch } from "../../../store/hooks";
 import { addActiveBot } from "../../../store/features/bots/botsSlice";
 import { useNavigate } from "react-router-dom";
+import { setActivePublicBot } from "../../../store/features/bots/botsSlice";
 type Props = {
     image: string
     botname: string
@@ -17,15 +18,21 @@ type Props = {
 export default function Helpers({ image, botname, description, id, prompt, type }: Props) {
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
+
+    const ha = () => {
+        dispatch(setActivePublicBot({ id, botname, description }))
+        navigate('/chat/${botname}')
+    }
+
     const handleClick = () => {
         dispatch(addActiveBot({ botname, description, id, prompt, type }));
         navigate(`/manager/${botname}`)
     }
     return (
         <div className='mt-4 flex p-2 hover:bg-[#414142] rounded duration-300 w-[400px] justify-between'>
-            <div className='flex'>
+            <div className='flex w-full' onClick={() => ha()}>
                 <img alt='helpers' src={image === '' ? "https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI=" : image} width={60} height={60} className='rounded-md h-[60px]' />
-                <div className='ml-4'>
+                <div className='ml-4 w-full'>
                     <p className='text-[var(--textColor)] text-xl font-normal'>{botname}</p>
                     <p className='text-sm text-[var(--mutedTextColor)]'>{(formatText(description, 50))}</p>
                 </div>

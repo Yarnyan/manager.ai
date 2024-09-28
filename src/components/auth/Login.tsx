@@ -18,7 +18,6 @@ type Props = {
 
 type Inputs = {
   login?: string;
-  email?: string;
   password?: string;
 };
 
@@ -31,8 +30,7 @@ const Login = forwardRef<HTMLDivElement, Props>(({ onCloseLogModal }, ref) => {
 
   const schema = yup.object().shape({
     login: yup.string().required("Login is required"),
-    email: yup.string().email("Email is invalid").required("Email is required"),
-    password: yup.string().min(8, "Password must be at least 8 characters").max(32, "Password cannot exceed 32 characters").required("Password is required"),
+    password: yup.string().required("Password is required"),
   });
 
   const {
@@ -49,7 +47,6 @@ const Login = forwardRef<HTMLDivElement, Props>(({ onCloseLogModal }, ref) => {
     const formData = new FormData();
 
     formData.append("login", data.login);
-    formData.append("email", data.email);
     formData.append("password", data.password);
 
     try {
@@ -84,13 +81,6 @@ const Login = forwardRef<HTMLDivElement, Props>(({ onCloseLogModal }, ref) => {
           <input {...register("login", { required: true })} placeholder='Login' className='border-0 outline-0 p-[10px] h-[40px] text-[var(--textColor)] bg-[#303136] rounded-r w-full' />
         </div>
         {errors.login && <p className='text-red-500 text-sm mt-[-10px]'>{errors.login.message}</p>}
-        <div className='flex items-center w-full'>
-          <div className='rounded-l bg-[#303136] w-[40px] h-[40px] rouded-l flex items-center justify-center'>
-            <MdOutlineEmail className='text-[var(--textColor)]' size={20} />
-          </div>
-          <input {...register("email", { required: true })} placeholder='Email' className='border-0 outline-0 p-[10px] h-[40px] text-[var(--textColor)] bg-[#303136] rounded-r w-full' />
-        </div>
-        {errors.email && <p className='text-red-500 text-sm mt-[-10px]'>{errors.email.message}</p>}
         <div className='flex items-center w-full'>
           <div className='rounded-l bg-[#303136] w-[40px] h-[40px] rouded-l flex items-center justify-center'>
             <RiLockPasswordLine className='text-[var(--textColor)]' size={20} />

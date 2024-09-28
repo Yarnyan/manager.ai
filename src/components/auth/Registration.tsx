@@ -32,7 +32,7 @@ const Registration = forwardRef<HTMLDivElement, Props>(({ onCloseRegModal }, ref
   const schema = yup.object().shape({
     login: yup.string().required(),
     email: yup.string().email().required(),
-    password: yup.string().min(8).max(32).required(),
+    password: yup.string().required(),
   });
 
   const {
@@ -73,7 +73,7 @@ const Registration = forwardRef<HTMLDivElement, Props>(({ onCloseRegModal }, ref
       </div>
       <div className='w-full'>
         <h1 className='text-xl text-[var(--textColor)] font-normal text-center'>manager.ai</h1>
-        <p className='text-xl text-[var(--mutedTextColor)] font-[100] text-center mt-[12px]'>Регистрация</p>
+        <p className='text-xl text-[var(--mutedTextColor)] font-[100] text-center mt-[12px]'>Registration</p>
       </div>
       <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-4 mt-4'>
         <div className='flex items-center w-full'>
