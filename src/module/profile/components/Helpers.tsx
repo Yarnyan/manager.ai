@@ -21,7 +21,7 @@ export default function Helpers({ image, botname, description, id, prompt, type 
 
     const ha = () => {
         dispatch(setActivePublicBot({ id, botname, description }))
-        navigate('/chat/${botname}')
+        navigate(`/chat/${botname}`)
     }
 
     const handleClick = () => {
