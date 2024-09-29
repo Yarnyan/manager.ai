@@ -5,9 +5,9 @@ import { chatApi } from "../../../api/chatApi"
 const socketApi = chatApi.injectEndpoints({
     endpoints: (build) => ({
         getAllMessage: build.query<any, unknown>({
-            query: () => (
+            query: (id) => (
                 {
-                    url: '/chat/getChats',
+                    url: `/chat/getMessages?chatId=${id}`,
                 }),
         }),
         sendMessage: build.mutation<IMessage, any>({
@@ -26,4 +26,4 @@ const socketApi = chatApi.injectEndpoints({
     overrideExisting: false,
 })
 
-export const { useGetAllMessageQuery, useSendMessageMutation, useLazyGetChatsQuery } = socketApi
+export const { useLazyGetAllMessageQuery, useSendMessageMutation, useLazyGetChatsQuery } = socketApi

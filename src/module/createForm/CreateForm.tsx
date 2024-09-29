@@ -54,6 +54,7 @@ const CreateForm = ({ }) => {
 
         } catch (error) {
             if (isApiError(error)) {
+                console.log(error)
                 setError(error.data.message);
             } else {
                 setError('Invalid error');

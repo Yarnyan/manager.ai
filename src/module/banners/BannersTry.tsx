@@ -16,7 +16,7 @@ export default function BannersTry({ }: Props) {
             <h1 className='text-xl font-normal text-[var(--textColor)]'>Try these</h1>
             <div className='mt-2 w-full flex flex-wrap sm:flex-nowrap sm:overflow-x-auto sm:pb-2'>
                 {bots.slice(3, 4).map((banner) => (
-                    <LittleBanner key={banner.id} img={''} name={banner.botname} description={banner.description} />
+                    <LittleBanner id={banner.id} key={banner.id} img={''} botname={banner.botname} description={banner.description} />
                 ))}
             </div>
         </div>

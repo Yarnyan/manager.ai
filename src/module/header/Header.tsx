@@ -31,7 +31,7 @@ export default function Header({ openRegModal, openLogModal }: Props) {
                 <h1 className="text-xl font-normal text-[var(--mutedTextColor)] sm:hidden">
                     <Typewriter
                         options={{
-                            strings: ['Welcome to manager AI'], //Yarnyan
+                            strings: ['Welcome to manager AI'], 
                             autoStart: true,
                             loop: false,
                             delay: 75,

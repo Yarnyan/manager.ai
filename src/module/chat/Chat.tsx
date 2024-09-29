@@ -1,73 +1,74 @@
 import { useEffect, useRef, useState } from 'react';
 import AvatarUser from '../../components/ui/Avatar';
 import Message from './components/Message';
-import { useGetAllMessageQuery } from './api/chatApi';
 import { IoMdSend } from "react-icons/io";
 import Loader from '../../components/loader/Loader';
 import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
-import { IMessage } from './entity/entity';
-import { useAppSelector } from '../../store/hooks';
-import { useLazyGetChatsQuery, useSendMessageMutation } from './api/chatApi';
+import { useLazyGetChatsQuery, useSendMessageMutation, useLazyGetAllMessageQuery } from './api/chatApi';
 import { isApiError } from '../../helpers/auth/apiError';
+import { useLocation } from 'react-router';
 
 export default function Chat() {
   const chatRef = useRef<HTMLDivElement>(null);
-  const [messages, setMessages] = useState<IMessage[]>([]);
+  const [messages, setMessages] = useState([]);
   const connectionRef = useRef<HubConnection | null>(null);
-
   const [m, setM] = useState('');
 
-  const { data, isLoading } = useGetAllMessageQuery(null);
-  const [getChats, chats] = useLazyGetChatsQuery();
+  const [getChats] = useLazyGetChatsQuery();
+  const [getMessages, { isLoading }] = useLazyGetAllMessageQuery();
   const [sendMessage] = useSendMessageMutation();
-
-  const bot = useAppSelector((state) => state.bots.activePublicBot);
-  console.log(bot)
-
+  const location = useLocation()
   const token = localStorage.getItem('token');
+  const bot = JSON.parse(localStorage.getItem('activePublicBot'));
+  const user = JSON.parse(localStorage.getItem('user'));
 
   useEffect(() => {
     try {
       getChats(null).then((res) => {
-        console.log(res)
-      })
-    } catch (error) {
-      if(error) {
-        console.log(error)
-        console.log(isApiError(error))
-      }
-    }
-  }, []);
-
-    useEffect(() => {
-      const connection = new HubConnectionBuilder()
-          .withUrl('http://127.0.0.1:8443/chat/hub', {
-              accessTokenFactory: () => Promise.resolve(token || '')
-          })
-          .configureLogging(LogLevel.Information)
-          .build();
-
-      connection.start()
-          .then(() => console.log('Connection started'))
-          .catch(error => console.log('Error establishing connection', error));
-
-      connection.on('ReceiveMessage', (message: string, userId: number) => {
-          setMessages((prevMessages: any) => {
-              return [
-                  ...prevMessages,
-                  {
-                      text: message,
-                      fromId: userId,
-                  }
-              ];
+        const chatsData = res?.data || [];
+        const matchedChat = chatsData.find(chat => chat.botId === bot?.id);
+        if (matchedChat) {
+          getMessages(matchedChat.id).then((data) => {
+            setMessages(data?.data?.detail || []);
+          }).catch((error) => {
+            console.error(error);
           });
+        }
       });
+    } catch (error) {
+      console.log(isApiError(error));
+    }
+  }, [location]);
 
-      connectionRef.current = connection;
+  useEffect(() => {
+    const connection = new HubConnectionBuilder()
+      .withUrl('http://127.0.0.1:8443/chat/hub', {
+        accessTokenFactory: () => Promise.resolve(token || '')
+      })
+      .configureLogging(LogLevel.Information)
+      .build();
 
-      return () => {
-          connection.stop().then(() => console.log('Connection stopped'));
-      };
+    connection.start()
+      .then(() => console.log('Connection started'))
+      // .catch(error => console.log('Error establishing connection', error));
+
+    connection.on('ReceiveMessage', (message: string, chatId: number, isFromUser: boolean) => {
+      setMessages((prevMessages: any) => [
+        ...prevMessages,
+        {
+          text: message,
+          chatId: chatId,
+          isFromUser: isFromUser,
+          name: isFromUser ? 'You' : bot?.botname,
+        }
+      ]);
+    });
+
+    connectionRef.current = connection;
+
+    return () => {
+      connection.stop().then(() => console.log('Connection stopped'));
+    };
   }, []);
 
   useEffect(() => {
@@ -83,17 +84,31 @@ export default function Chat() {
   const handleSendMessage = (message: string) => {
     const formData = new FormData();
     formData.append("message", message);
-    formData.append("id", String(bot?.id))
+    formData.append("botId", String(bot?.id));
+
+    const newMessage = {
+      text: message,
+      name: 'You',
+      isFromUser: true,
+    };
+
+    setMessages((prevMessages) => [...prevMessages, newMessage]);
 
     try {
-      if(m) {
-        const response = sendMessage(formData).unwrap();
-        setM('')
+      if (m) {
+        sendMessage(formData).unwrap();
+        setM('');
       }
     } catch (error) {
-
+      console.error(error);
     }
-  }
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      handleSendMessage(m);
+    }
+  };
 
   return (
     <div className='w-full h-full flex flex-col items-center'>
@@ -103,25 +118,23 @@ export default function Chat() {
             <>
               <div className='flex flex-col items-center p-4'>
                 <AvatarUser width={70} height={70} />
-                <p className='text-s text-[var(--mutedTextColor)] font-normal mt-4 sm:text-center'>{bot?.description}</p>
+                <p className='text-s text-[var(--mutedTextColor)] font-normal mt-4 sm:text-center'>{bot?.botname}</p>
                 <p className='text-[14px] text-[var(--mutedTextColor)] font-normal'>Author: @Root</p>
               </div>
               <div className='flex flex-col w-full mt-4 max-w-3xl'>
-                {messages && messages.length > 0 && (
-                  messages.map((item: IMessage, index: number) => (
-                    <div key={index} className={`${item.user_id === 2 ? 'w-full flex justify-end' : 'w-full flex justify-start'}`}>
-                      <Message text={item.text} name={item.name} user_id={item.user_id} img={item.image} />
-                    </div>
-                  ))
-                )}
+                {messages.length > 0 && messages.map((item, index) => (
+                  <div key={index} className={`${item.isFromUser ? 'w-full flex justify-start' : 'w-full flex justify-end'}`}>
+                    <Message isFromUser={item.isFromUser} name={item.name} text={item.text} />
+                  </div>
+                ))}
               </div>
             </>
           </div>
           <div className='h-[60px] mt-4 flex items-center justify-center flex-col'>
             <div className='w-full flex items-center justify-center'>
-              <input placeholder='Message' className='w-[40%] border-0 mt-1 outline-0 p-[10px] h-[40px] text-[var(--textColor)] bg-[#303136] rounded-l sm:w-[80%]' onChange={(e) => setM(e.target.value)} value={m} />
+              <input placeholder='Message' className='w-[40%] border-0 mt-1 outline-0 p-[10px] h-[40px] text-[var(--textColor)] bg-[#303136] rounded-l sm:w-[80%]' onChange={(e) => setM(e.target.value)} value={m} onKeyDown={handleKeyDown}  />
               <div className='bg-[#303136] bg-[#303136] mt-1 rounded-r cursor-pointer w-[40px] h-[40px] flex items-center justify-center' onClick={() => handleSendMessage(m)}>
-                <IoMdSend className='' fill='#F5F5F5' size={20} />
+                <IoMdSend fill='#F5F5F5' size={20} />
               </div>
             </div>
             <p className='text-[var(--mutedTextColor)] text-[14px] mt-2 sm:text-center sm:mt-1 sm:hidden'>Помните: все что говорит manager будет видно всем</p>

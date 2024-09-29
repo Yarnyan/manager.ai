@@ -20,6 +20,7 @@ type Inputs = {
   username?: string;
   email?: string;
   password?: string;
+  onCloseSettingModal?: () => void
   // photo: string;
 };
 

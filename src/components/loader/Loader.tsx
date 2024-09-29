@@ -1,5 +1,4 @@
 import CircularProgress from '@mui/material/CircularProgress';
-
 type Props = {}
 
 export default function Loader({}: Props) {

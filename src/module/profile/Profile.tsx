@@ -14,9 +14,10 @@ import { Bot } from './entity/bot';
 import Loader from '../../components/loader/Loader';
 type Props = {
     settingModal: () => void
+    telegramModal: () => void
 }
 
-export default function Profile({ settingModal }: Props) {
+export default function Profile({ settingModal, telegramModal }: Props) {
     const [activeButton, setActiveButton] = useState<'helpers' | 'tasks' | null>('helpers')
     const [copiedText, copy] = useCopyToClipboard()
     const dispatch = useAppDispatch()
@@ -35,6 +36,7 @@ export default function Profile({ settingModal }: Props) {
             getUser(null).then((response) => {
                 if (response.data) {
                     dispatch(addUser(response.data?.detail));
+                    localStorage.setItem('user',JSON.stringify(response.data.detail))
                 }
             });
         } catch (error) {
@@ -48,7 +50,6 @@ export default function Profile({ settingModal }: Props) {
     useEffect(() => {
         try {
             getBots(null)
-            console.log(bots)
         } catch (error) {
 
         }
@@ -98,7 +99,7 @@ export default function Profile({ settingModal }: Props) {
                     My assistants
                 </button>
             </div>
-            <div className='flex flex-col max-h-[calc(100vh-500px)] overflow-y-scroll p-4 sm:max-h-[calc(100dvh-400px)]'>
+            <div className='flex flex-col max-h-[calc(100vh-500px)] overflow-y-auto p-4 sm:max-h-[calc(100dvh-400px)] sm:w-full'>
                 {bots && bots.length > 0 && bots.map((item:Bot) => {
                     return (
                         <Helpers
@@ -109,6 +110,7 @@ export default function Profile({ settingModal }: Props) {
                             prompt={item.prompt}
                             id={item.id}
                             type={item.type}
+                            telegramModal={telegramModal}
                         />
                     )
                 })}
