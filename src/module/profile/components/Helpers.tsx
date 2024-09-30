@@ -7,6 +7,8 @@ import { addActiveBot } from "../../../store/features/bots/botsSlice";
 import { useNavigate } from "react-router-dom";
 import { setActivePublicBot } from "../../../store/features/bots/botsSlice";
 import { useMediaQuery } from "usehooks-ts";
+import { MdDelete } from "react-icons/md";
+import { useRemoveBotMutation } from "../api/bot";
 type Props = {
     image: string
     botname: string
@@ -20,6 +22,8 @@ type Props = {
 export default function Helpers({ image, botname, description, id, prompt, type, telegramModal }: Props) {
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
+    
+    const [deleteBot] = useRemoveBotMutation()
 
     const ha = () => {
         dispatch(setActivePublicBot({ id, botname, description }))
@@ -30,6 +34,21 @@ export default function Helpers({ image, botname, description, id, prompt, type,
     const handleClick = () => {
         dispatch(addActiveBot({ botname, description, id, prompt, type }));
         navigate(`/manager/${botname}`)
+    }
+
+    const handleTelegram = () => {
+        localStorage.setItem('activePublicBot', JSON.stringify({ id: id, botname: botname, description: description}))
+        telegramModal()
+    }
+
+    const removeBot = () => {
+        const formdata = new FormData()
+        formdata.append('BotId', String(id))
+        try {
+            deleteBot(formdata).unwrap()
+        } catch (error) {
+            
+        }
     }
 
     const mobile = useMediaQuery('(min-width: 768px)')
@@ -48,8 +67,11 @@ export default function Helpers({ image, botname, description, id, prompt, type,
                 <button onClick={() => handleClick()}>
                     <MdOutlineEdit size={20} fill='var(--mutedTextColor)' className='cursor-pointer' />
                 </button>
-                <button onClick={telegramModal}>
+                <button onClick={() => handleTelegram()} >
                     <FaTelegramPlane size={20} fill='var(--mutedTextColor)' className='cursor-pointer mt-4' />
+                </button>
+                <button onClick={() => removeBot()}>
+                    <MdDelete size={20} fill='var(--mutedTextColor)' className='cursor-pointer mt-4' />
                 </button>
             </div>
         </div>

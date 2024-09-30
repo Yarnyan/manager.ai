@@ -24,7 +24,6 @@ export default function Profile({ settingModal, telegramModal }: Props) {
     const [getUser, user] = useLazyGetUserQuery()
     const [getBots, {data: bots, isLoading}] = useLazyGetUserBotsQuery()
 
-
     const handleClick = (button: 'helpers' | 'tasks') => {
         setActiveButton(button)
     }
@@ -39,16 +38,6 @@ export default function Profile({ settingModal, telegramModal }: Props) {
                     localStorage.setItem('user',JSON.stringify(response.data.detail))
                 }
             });
-        } catch (error) {
-
-        }
-        return () => {
-
-        };
-    }, []);
-
-    useEffect(() => {
-        try {
             getBots(null)
         } catch (error) {
 
