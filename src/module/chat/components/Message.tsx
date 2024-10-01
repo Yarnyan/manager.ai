@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import AvatarUser from '../../../components/ui/Avatar';
 import Typewriter from 'typewriter-effect';
 
@@ -9,6 +8,7 @@ type Props = {
 };
 
 export default function Message({ text, name, isFromUser }: Props) {
+
   const bot = JSON.parse(localStorage.getItem('activePublicBot'));
 
   const renderMessage = () => {
@@ -38,7 +38,7 @@ export default function Message({ text, name, isFromUser }: Props) {
         <AvatarUser width={30} height={30} src={''} />
         <p className='text-[var(--textColor)] font-normal ml-2 mr-2 text-[14px]'>{name ? name : alter}</p>
       </div>
-      <div className='w-full mt-2 bg-[#303136] p-4 rounded-lg'>
+      <div className='w-full mt-2 bg-[#303136] p-4 rounded-lg break-all'>
         {renderMessage()}
       </div>
     </div>

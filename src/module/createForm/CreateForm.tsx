@@ -1,4 +1,3 @@
-
 import React, { useState, useRef } from 'react';
 import { useForm, SubmitHandler } from "react-hook-form";
 import * as yup from "yup";
@@ -7,6 +6,7 @@ import { useCreateBotMutation } from '../banners/api/banners';
 import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import { isApiError } from '../../helpers/auth/apiError';
+import CircularProgress from '@mui/material/CircularProgress';
 
 type Inputs = {
     botName?: string;
@@ -17,8 +17,9 @@ type Inputs = {
 const CreateForm = ({ }) => {
     const [bioLength, setBioLength] = useState(0);
     const [fileName, setFileName] = useState('');
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false); 
     const fileInputRef = useRef<HTMLInputElement | null>(null);
 
     const [createBot] = useCreateBotMutation();
@@ -39,8 +40,8 @@ const CreateForm = ({ }) => {
     });
 
     const onSubmit: SubmitHandler<Inputs> = async (data) => {
+        setLoading(true); // Включаем лоадер перед запросом
         try {
-
             const formData = new FormData();
             formData.append("botName", data.botName);
             formData.append("botDescription", data.botDescription);
@@ -49,16 +50,15 @@ const CreateForm = ({ }) => {
             const response = await createBot(formData).unwrap();
 
             reset();
-
             setOpen(true);
-
         } catch (error) {
             if (isApiError(error)) {
-                console.log(error)
                 setError(error.data.message);
             } else {
                 setError('Invalid error');
             }
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -115,7 +115,9 @@ const CreateForm = ({ }) => {
                     {errors.BotPrompt && <p className='text-red-500 text-sm'>{errors.BotPrompt.message}</p>}
                 </div>
                 <div className='flex justify-center'>
-                    <input type="submit" className='p-2.5 bg-[#F5F5F5] rounded-2xl text-l font-normal text-[#000000] hover:bg-[#d3d3d6] duration-300 w-max cursor-pointer' value={'Продолжить'} />
+                    <button type="submit" className='p-2.5 bg-[#F5F5F5] rounded-2xl text-l font-normal text-[#000000] hover:bg-[#d3d3d6] duration-300 w-max cursor-pointer flex justify-center items-center min-w-[120px]' disabled={loading}>
+                        {loading ? <CircularProgress size={30} sx={{color: 'black'}} /> : 'Create manager'}
+                    </button>
                 </div>
                 {error && <p className='text-red-500 text-l mt-[10px] text-center'>{error}</p>}
             </form>

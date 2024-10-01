@@ -50,7 +50,7 @@ export default function Chat() {
 
     connection.start()
       .then(() => console.log('Connection started'))
-      // .catch(error => console.log('Error establishing connection', error));
+    // .catch(error => console.log('Error establishing connection', error));
 
     connection.on('ReceiveMessage', (message: string, chatId: number, isFromUser: boolean) => {
       setMessages((prevMessages: any) => [
@@ -112,35 +112,40 @@ export default function Chat() {
 
   return (
     <div className='w-full h-full flex flex-col items-center'>
-      <div className='mt-4 w-full flex flex-col items-center'>
-        <div className='w-full'>
-          <div className='mt-4 w-full flex flex-col items-center overflow-y-auto h-[calc(100vh-190px)] sm:h-[calc(100dvh-190px)] p-2' ref={chatRef}>
-            <>
-              <div className='flex flex-col items-center p-4'>
-                <AvatarUser width={70} height={70} />
-                <p className='text-s text-[var(--mutedTextColor)] font-normal mt-4 sm:text-center'>{bot?.botname}</p>
-                <p className='text-[14px] text-[var(--mutedTextColor)] font-normal'>Author: @Root</p>
-              </div>
-              <div className='flex flex-col w-full mt-4 max-w-3xl'>
-                {messages.length > 0 && messages.map((item, index) => (
-                  <div key={index} className={`${item.isFromUser ? 'w-full flex justify-start' : 'w-full flex justify-end'}`}>
-                    <Message isFromUser={item.isFromUser} name={item.name} text={item.text} />
-                  </div>
-                ))}
-              </div>
-            </>
+      <div className='flex-1 w-full flex flex-col items-center overflow-y-auto p-2' ref={chatRef}>
+        <>
+          <div className='flex flex-col items-center p-4'>
+            <AvatarUser width={70} height={70} />
+            <p className='text-s text-[var(--mutedTextColor)] font-normal mt-4 sm:text-center'>{bot?.botname}</p>
+            <p className='text-[14px] text-[var(--mutedTextColor)] font-normal'>Author: @Root</p>
           </div>
-          <div className='h-[60px] mt-4 flex items-center justify-center flex-col'>
-            <div className='w-full flex items-center justify-center'>
-              <input placeholder='Message' className='w-[40%] border-0 mt-1 outline-0 p-[10px] h-[40px] text-[var(--textColor)] bg-[#303136] rounded-l sm:w-[80%]' onChange={(e) => setM(e.target.value)} value={m} onKeyDown={handleKeyDown}  />
-              <div className='bg-[#303136] bg-[#303136] mt-1 rounded-r cursor-pointer w-[40px] h-[40px] flex items-center justify-center' onClick={() => handleSendMessage(m)}>
-                <IoMdSend fill='#F5F5F5' size={20} />
+          <div className='flex flex-col w-full mt-4 max-w-3xl'>
+            {messages.length > 0 && messages.map((item, index) => (
+              <div key={index} className={`${item.isFromUser ? 'w-full flex justify-start' : 'w-full flex justify-end'}`}>
+                <Message isFromUser={item.isFromUser} name={item.name} text={item.text} />
               </div>
-            </div>
-            <p className='text-[var(--mutedTextColor)] text-[14px] mt-2 sm:text-center sm:mt-1 sm:hidden'>Помните: все что говорит manager будет видно всем</p>
+            ))}
+          </div>
+        </>
+      </div>
+      <div className='w-full p-4 fixed bottom-0'>
+        <div className='flex items-center justify-center'>
+          <input
+            placeholder='Message'
+            className='w-[40%] border-0 outline-0 p-[10px] h-[50px] text-[var(--textColor)] bg-[#303136] rounded-l sm:w-[80%]'
+            onChange={(e) => setM(e.target.value)}
+            value={m}
+            onKeyDown={handleKeyDown}
+          />
+          <div className='bg-[#303136] rounded-r cursor-pointer w-[40px] h-[50px] flex items-center justify-center' onClick={() => handleSendMessage(m)}>
+            <IoMdSend fill='#F5F5F5' size={20} />
           </div>
         </div>
+        <p className='text-[var(--mutedTextColor)] text-[14px] mt-2 sm:text-center sm:mt-1 sm:hidden'>
+          Remember: everything the manager says will be seen by everyone.
+        </p>
       </div>
     </div>
+
   );
 }

@@ -8,6 +8,7 @@ const bannersApi = api.injectEndpoints({
                 method: 'POST',
                 body: data,
             }),
+            invalidatesTags: ['Create']
         }),
         getPublicBots: build.query<any, any>({
             query: () => ({

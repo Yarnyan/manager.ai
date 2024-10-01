@@ -21,6 +21,7 @@ const socketApi = chatApi.injectEndpoints({
             query: () => ({
                 url: '/chat/getChats',
             }),
+            providesTags: ['Create']
         })
     }),
     overrideExisting: false,

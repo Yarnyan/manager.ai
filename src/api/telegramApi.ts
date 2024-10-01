@@ -16,7 +16,7 @@ export const telegramApi = createApi({
         return headers;
       },
     }),
-    tagTypes: ['Update', 'BotUpdate', 'Auth'],
+    tagTypes: ['Update', 'BotUpdate', 'Auth', 'Create'],
     endpoints: () => ({}),
   });
 
