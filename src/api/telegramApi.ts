@@ -1,10 +1,10 @@
 
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-
+import { telegramApiUrl } from './routes/routes';
 export const telegramApi = createApi({
     reducerPath: 'telegramApi',
     baseQuery: fetchBaseQuery({
-      baseUrl: 'http://127.0.0.1:8441/',
+      baseUrl: telegramApiUrl,
       prepareHeaders: (headers) => {
         const token = localStorage.getItem('token');
         if (token) {

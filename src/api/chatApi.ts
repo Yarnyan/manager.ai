@@ -1,10 +1,10 @@
 
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-
+import { chatApiUrl } from './routes/routes';
 export const chatApi = createApi({
     reducerPath: 'chatApi',
     baseQuery: fetchBaseQuery({
-      baseUrl: 'http://127.0.0.1:8443/',
+      baseUrl: chatApiUrl,
       prepareHeaders: (headers) => {
         const token = localStorage.getItem('token');
         if (token) {

@@ -7,6 +7,7 @@ import ManagerPage from "./pages/ManagerPage"
 import ChatPage from "./pages/ChatPage"
 import ProtectedRouter from "./helpers/router/ProtectedRouter"
 import { createSignalRContext } from "react-signalr/signalr";
+import { chatHubUrl } from "./api/routes/routes"
 function App() {
 
   const SignalRContext = createSignalRContext();
@@ -18,7 +19,7 @@ function App() {
       connectEnabled={!!token}
       accessTokenFactory={() => token}
       dependencies={[token]}
-      url={'http://127.0.0.1:8443/chat/hub'}
+      url={chatHubUrl}
     >
       <BrowserRouter>
         <RootLayout>

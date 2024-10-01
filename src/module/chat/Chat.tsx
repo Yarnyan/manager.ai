@@ -7,7 +7,7 @@ import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signal
 import { useLazyGetChatsQuery, useSendMessageMutation, useLazyGetAllMessageQuery } from './api/chatApi';
 import { isApiError } from '../../helpers/auth/apiError';
 import { useLocation } from 'react-router';
-
+import { chatHubUrl } from '../../api/routes/routes';
 export default function Chat() {
   const chatRef = useRef<HTMLDivElement>(null);
   const [messages, setMessages] = useState([]);
@@ -42,7 +42,7 @@ export default function Chat() {
 
   useEffect(() => {
     const connection = new HubConnectionBuilder()
-      .withUrl('http://127.0.0.1:8443/chat/hub', {
+      .withUrl(chatHubUrl, {
         accessTokenFactory: () => Promise.resolve(token || '')
       })
       .configureLogging(LogLevel.Information)
@@ -128,11 +128,11 @@ export default function Chat() {
           </div>
         </>
       </div>
-      <div className='w-full p-4 fixed bottom-0'>
+      <div className='w-full max-w-[1280px] p-4 fixed bottom-0'>
         <div className='flex items-center justify-center'>
           <input
             placeholder='Message'
-            className='w-[40%] border-0 outline-0 p-[10px] h-[50px] text-[var(--textColor)] bg-[#303136] rounded-l sm:w-[80%]'
+            className='w-[60%] border-0 outline-0 p-[10px] h-[50px] text-[var(--textColor)] bg-[#303136] rounded-l sm:w-[80%]'
             onChange={(e) => setM(e.target.value)}
             value={m}
             onKeyDown={handleKeyDown}
@@ -141,9 +141,6 @@ export default function Chat() {
             <IoMdSend fill='#F5F5F5' size={20} />
           </div>
         </div>
-        <p className='text-[var(--mutedTextColor)] text-[14px] mt-2 sm:text-center sm:mt-1 sm:hidden'>
-          Remember: everything the manager says will be seen by everyone.
-        </p>
       </div>
     </div>
 
