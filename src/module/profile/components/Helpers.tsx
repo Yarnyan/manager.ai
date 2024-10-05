@@ -1,5 +1,4 @@
 import { MdOutlineEdit } from "react-icons/md";
-import { Link } from 'react-router-dom';
 import { FaTelegramPlane } from "react-icons/fa";
 import { formatText } from "../../../helpers/text/formatText";
 import { useAppDispatch } from "../../../store/hooks";
@@ -59,7 +58,7 @@ export default function Helpers({ image, botname, description, id, prompt, type,
             <div className='flex w-full' onClick={() => ha()}>
                 <img alt='helpers' src={image === '' ? "https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI=" : image} width={60} height={60} className='rounded-md h-[60px]' />
                 <div className='ml-4 w-full'>
-                    <p className='text-[var(--textColor)] text-xl font-normal'>{botname}</p>
+                    <p className='text-[var(--textColor)] text-xl font-normal'>{formatText(botname, to)}</p>
                     <p className='text-sm text-[var(--mutedTextColor)] break-all'>{(formatText(description, to))}</p>
                 </div>
             </div>

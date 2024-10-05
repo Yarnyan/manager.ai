@@ -23,8 +23,8 @@ export default function Home() {
         <div className="max-w-7xl self-center w-full flex flex-col">
           <Header openRegModal={() => setRegModalOpen(true)} openLogModal={() => setLogModalOpen(true)} />
           <Banners />
-          <BannersTry />
-          <BannerRec />
+          {/* <BannersTry />
+          <BannerRec /> */}
           <Create />
           <Footer />
           <Modal open={regModalOpen} onClose={() => setRegModalOpen(false)}>

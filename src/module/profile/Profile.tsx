@@ -9,9 +9,13 @@ import { useCopyToClipboard } from 'usehooks-ts'
 import { useLazyGetUserQuery } from './api/user';
 import { useAppDispatch } from '../../store/hooks';
 import { addUser } from '../../store/features/user/userSlice';
-import { useLazyGetUserBotsQuery } from './api/user';
 import { Bot } from './entity/bot';
 import Loader from '../../components/loader/Loader';
+import Create from '../create/Create';
+import { useLazyGetChatsQuery } from '../chat/api/chatApi';
+import { useLazyGetUserBotsQuery } from './api/user';
+import { useLazyGetPublicBotsQuery } from '../banners/api/banners';
+
 type Props = {
     settingModal: () => void
     telegramModal: () => void
@@ -21,8 +25,11 @@ export default function Profile({ settingModal, telegramModal }: Props) {
     const [activeButton, setActiveButton] = useState<'helpers' | 'tasks' | null>('helpers')
     const [copiedText, copy] = useCopyToClipboard()
     const dispatch = useAppDispatch()
+
     const [getUser, user] = useLazyGetUserQuery()
-    const [getBots, {data: bots, isLoading}] = useLazyGetUserBotsQuery()
+    const [getBots, { data: bots, isLoading }] = useLazyGetUserBotsQuery()
+    const [getChats, chatsResult] = useLazyGetChatsQuery();
+    const [getPublicBots, publicBots] = useLazyGetPublicBotsQuery();
 
     const handleClick = (button: 'helpers' | 'tasks') => {
         setActiveButton(button)
@@ -35,10 +42,13 @@ export default function Profile({ settingModal, telegramModal }: Props) {
             getUser(null).then((response) => {
                 if (response.data) {
                     dispatch(addUser(response.data?.detail));
-                    localStorage.setItem('user',JSON.stringify(response.data.detail))
+                    localStorage.setItem('user', JSON.stringify(response.data.detail))
                 }
             });
-            getBots(null)
+            getChats(null).then((res) => {
+                getPublicBots(null)
+                getBots(null)
+            })
         } catch (error) {
 
         }
@@ -47,7 +57,7 @@ export default function Profile({ settingModal, telegramModal }: Props) {
         };
     }, []);
 
-    if(isLoading) {
+    if (isLoading) {
         return <Loader />
     }
 
@@ -66,6 +76,12 @@ export default function Profile({ settingModal, telegramModal }: Props) {
         setOpen(false);
     };
 
+    const filteredBots = [
+        ...(bots || []), 
+        ...(publicBots.data || [])
+      ].filter((bot: any) =>
+        chatsResult.data?.some((chat: any) => chat.botId === bot.id)
+      );
 
     return (
         <div className="flex flex-col justify-center w-full items-center mt-40 sm:mt-8">
@@ -80,16 +96,18 @@ export default function Profile({ settingModal, telegramModal }: Props) {
                     <CiShare2 fill='#fff' size={24} />
                 </button>
             </div>
-            <div className='mt-4 flex'>
-                <button
-                    className={`relative text-m font-normal text-[var(--mutedTextColor)] ${activeButton === 'helpers' ? 'after:content-[""] after:absolute after:w-full after:h-[2px] after:bg-[var(--mutedTextColor)] after:left-0 after:bottom-[-2px]' : ''}`}
-                    onClick={() => handleClick('helpers')}
-                >
-                    My assistants
-                </button>
-            </div>
-            <div className='flex flex-col max-h-[calc(100vh-500px)] overflow-y-auto p-4 sm:max-h-[calc(100dvh-400px)] sm:w-full'>
-                {bots && bots.length > 0 && bots.map((item:Bot) => {
+            {bots && bots.length > 0 && (
+                <div className='mt-4 flex'>
+                    <div
+                        className={`relative text-m font-normal text-[var(--mutedTextColor)] ${activeButton === 'helpers' ? 'after:content-[""] after:absolute after:w-full after:h-[2px] after:bg-[var(--mutedTextColor)] after:left-0 after:bottom-[-2px]' : ''}`}
+                        onClick={() => handleClick('helpers')}
+                    >
+                        My assistants
+                    </div>
+                </div>
+            )}
+            <div className={`flex flex-col max-h-[calc(100vh-500px)] p-4 ${bots && bots.length > 0 ? 'sm:max-h-[calc(100dvh-400px)] overflow-y-auto' : ''} sm:w-full`}>
+                {filteredBots && filteredBots.length > 0 ? filteredBots.map((item: Bot) => {
                     return (
                         <Helpers
                             key={item.id}
@@ -102,7 +120,9 @@ export default function Profile({ settingModal, telegramModal }: Props) {
                             telegramModal={telegramModal}
                         />
                     )
-                })}
+                }) : (
+                    <Create profile={true} />
+                )}
             </div>
             <Snackbar open={open} autoHideDuration={3000} onClose={handleClose} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
                 <Alert

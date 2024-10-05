@@ -8,7 +8,7 @@ export default function RootLayout({
     <html lang="en">
         <body className="bg-[var(--bgColor)]">
           <main className="flex relative">
-            <div className="fixed sm:absolute">
+            <div className="absolute">
               <SideBar />
             </div>
             <div className="w-full">

@@ -1,10 +1,12 @@
 import { Link } from 'react-router-dom';
 import { RiMagicLine } from "react-icons/ri";
-type Props = {}
+type Props = {
+  profile?: boolean
+}
 
-export default function Create({}: Props) {
+export default function Create({profile}: Props) {
   return (
-    <div className='mt-20'>
+    <div className={profile ? 'mt-10' : 'mt-20'}>
         <div className='flex items-center justify-center flex-col'>
             <h1 className='text-2xl font-normal text-[var(--textColor)]'>Create an assistant</h1>
             <p className='mt-4 text-center text-l text-[var(--mutedTextColor)] w-[480px] sm:w-auto'>Can't get along with the characters? Create your own! Customize parameters such as his voice, conversation start, tone and much more!</p>

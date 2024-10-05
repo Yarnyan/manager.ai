@@ -7,6 +7,7 @@ import SidebarBanner from '../../components/sidebarBanner/SidebarBanner';
 import { useLocation } from 'react-router-dom';
 import { useLazyGetChatsQuery } from '../chat/api/chatApi';
 import { useLazyGetUserBotsQuery } from '../profile/api/user';
+import { useLazyGetPublicBotsQuery } from '../banners/api/banners';
 
 type Props = {}
 
@@ -19,8 +20,10 @@ export default function SideBar({ }: Props) {
   };
 
   const [token, setToken] = useState<boolean | null>(null);
+  
   const [getUserBots, botsResult] = useLazyGetUserBotsQuery();
   const [getChats, chatsResult] = useLazyGetChatsQuery();
+  const [getPublicBots, publicBots] = useLazyGetPublicBotsQuery();
 
   const location = useLocation();
 
@@ -35,6 +38,7 @@ export default function SideBar({ }: Props) {
     try {
       getChats(null).then(() => {
         getUserBots(null); 
+        getPublicBots(null);
       });
     } catch (error) {
       console.error(error);
@@ -54,9 +58,12 @@ export default function SideBar({ }: Props) {
     };
   }, [sidebarRef]);
 
-  const filteredBots = botsResult.data?.filter((bot: any) =>
+  const filteredBots = [
+    ...(botsResult.data || []), 
+    ...(publicBots.data || [])
+  ].filter((bot: any) =>
     chatsResult.data?.some((chat: any) => chat.botId === bot.id) &&
-    (bot.botname.toLowerCase().includes(searchTerm.toLowerCase()))
+    bot.botname.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   if (token === null) {
@@ -87,7 +94,7 @@ export default function SideBar({ }: Props) {
             />
           </div>
           <h1 className='mt-4 text-m font-normal text-[var(--mutedTextColor)]'>Your chats</h1>
-          <div className='mt-2 max-h-[100%] overflow-y-auto'>
+          <div className='mt-2 max-h-[calc(100vh-240px)] overflow-y-auto'>
             {filteredBots?.map((bot: any) => (
               <SidebarBanner id={bot.id} key={bot.id} image={''} botname={bot.botname} closeBanner={toggleSidebar} description={bot.description} />
             ))}

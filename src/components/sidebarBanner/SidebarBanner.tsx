@@ -1,9 +1,8 @@
-import {Link} from 'react-router-dom'
 import { useAppDispatch } from '../../store/hooks'
 import { setActivePublicBot } from '../../store/features/bots/botsSlice'
 import { useNavigate } from 'react-router-dom'
 import AvatarContainer from '../ui/AvatarBurger'
-import { formatText } from '../../helpers/formatText'
+import { formatText } from '../../helpers/text/formatText'
 type Props = {
     id: number
     image?: string
@@ -25,8 +24,8 @@ export default function SidebarBanner({id, image, botname, closeBanner, descript
     <div className='mt-2 flex items-center p-2 hover:bg-[var(--hoverColor)] rounded cursor-pointer' onClick={() => handleClick()}>
         <AvatarContainer src={image} />
         <div className='ml-2'>
-          <p className='text-[var(--textColor)] text-m font-normal'>{botname}</p>
-          <p className='text-[var(--mutedTextColor)] text-s font-normal'>{formatText(description, 15)} </p>
+          <p className='text-[var(--textColor)] text-m font-normal'>{formatText(botname, 20)}</p>
+          <p className='text-[var(--mutedTextColor)] text-s font-normal'>{formatText(description, 20)} </p>
         </div>
     </div>
   )

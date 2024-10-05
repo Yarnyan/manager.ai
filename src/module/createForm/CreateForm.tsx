@@ -7,6 +7,7 @@ import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import { isApiError } from '../../helpers/auth/apiError';
 import CircularProgress from '@mui/material/CircularProgress';
+import { useNavigate } from 'react-router';
 
 type Inputs = {
     botName?: string;
@@ -21,13 +22,14 @@ const CreateForm = ({ }) => {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false); 
     const fileInputRef = useRef<HTMLInputElement | null>(null);
+    const navigate = useNavigate();
 
     const [createBot] = useCreateBotMutation();
 
     const schema = yup.object().shape({
         botName: yup.string().required(),
         botDescription: yup.string().required(),
-        BotPrompt: yup.string().max(500).required(),
+        BotPrompt: yup.string().required(),
     });
 
     const {
@@ -40,7 +42,7 @@ const CreateForm = ({ }) => {
     });
 
     const onSubmit: SubmitHandler<Inputs> = async (data) => {
-        setLoading(true); // Включаем лоадер перед запросом
+        setLoading(true);
         try {
             const formData = new FormData();
             formData.append("botName", data.botName);
@@ -51,6 +53,7 @@ const CreateForm = ({ }) => {
 
             reset();
             setOpen(true);
+            navigate('/profile')
         } catch (error) {
             if (isApiError(error)) {
                 setError(error.data.message);
@@ -109,9 +112,6 @@ const CreateForm = ({ }) => {
                 <div className='w-full flex flex-col'>
                     <label className='text-[var(--textColor)] text-sm text-normal'>Prompt</label>
                     <textarea {...register("BotPrompt", { required: true })} placeholder='Prompt' className='border-0  mt-1 outline-0 p-[10px] h-[140px] text-[var(--textColor)] bg-[#303136] rounded resize-none' onChange={handleBioChange} />
-                    <div className='flex justify-end mt-2'>
-                        <p className='text-[var(--mutedTextColor)] text-sm'>{bioLength}/500</p>
-                    </div>
                     {errors.BotPrompt && <p className='text-red-500 text-sm'>{errors.BotPrompt.message}</p>}
                 </div>
                 <div className='flex justify-center'>
