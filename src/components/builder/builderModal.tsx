@@ -7,6 +7,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useCreateBotMutation } from '../../module/banners/api/banners';
 import { isApiError } from '../../helpers/auth/apiError';
+import { useNavigate } from 'react-router';
 type Props = {
   onCloseBuilderModal: () => void;
 };
@@ -21,6 +22,8 @@ const BuilderModal = ({ onCloseBuilderModal }: Props) => {
   const [fields, setFields] = useState<Array<{ type: string, name: string, label: string, options?: string[] }>>([]);
 
   const [createBot] = useCreateBotMutation();
+
+  const navigate = useNavigate();
 
   const botLocal = JSON.parse(localStorage.getItem('activePublicBot') || '{}');
 
@@ -77,6 +80,8 @@ const BuilderModal = ({ onCloseBuilderModal }: Props) => {
 
     try {
       const response = await createBot(formData).unwrap();
+      onCloseBuilderModal()
+      navigate('/profile')
     } catch (error) {
       if (isApiError(error)) {
         setError(error.data.message);
