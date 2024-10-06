@@ -71,7 +71,7 @@ const Login = forwardRef<HTMLDivElement, Props>(({ onCloseLogModal }, ref) => {
       </div>
       <div className='w-full'>
         <h1 className='text-xl text-[var(--textColor)] font-normal text-center'>manager.ai</h1>
-        <p className='text-xl text-[var(--mutedTextColor)] font-[100] text-center mt-[12px]'>Вход</p>
+        <p className='text-xl text-[var(--mutedTextColor)] font-[100] text-center mt-[12px]'>Sign in</p>
       </div>
       <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-4 mt-4'>
       <div className='flex items-center w-full'>

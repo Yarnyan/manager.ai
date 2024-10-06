@@ -12,7 +12,9 @@ import { Bot } from '../profile/entity/bot';
 import { useAppDispatch } from '../../store/hooks';
 import { setAllBots } from '../../store/features/bots/botsSlice';
 import Loader from '../../components/loader/Loader';
-type Props = {}
+type Props = {
+  openBuilderModal: () => void
+}
 
 const navigation = {
   nextEl: '.swiper-banners-button-next',
@@ -20,7 +22,7 @@ const navigation = {
   clickable: true,
 }
 
-export default function Banners({ }: Props) {
+export default function Banners({openBuilderModal}: Props) {
   const [getPublicBots, {data: bots, isLoading}] = useLazyGetPublicBotsQuery();
   
   const dispatch = useAppDispatch();
@@ -55,7 +57,7 @@ export default function Banners({ }: Props) {
             >
               {bots.slice(0, 3).map((banner: Bot) => (
                 <SwiperSlide key={banner.id} className='swiper-slide-banners pr-2 last:pr-0'>
-                  <Banner id={banner.id} img={''} botname={banner.botname} description={banner.description} />
+                  <Banner id={banner.id} img={''} botname={banner.botname} description={banner.description} prompt={banner.prompt} openBuilderModal={openBuilderModal} />
                 </SwiperSlide>
               ))}
             </Swiper>
