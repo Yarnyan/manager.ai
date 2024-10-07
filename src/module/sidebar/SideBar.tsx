@@ -36,10 +36,12 @@ export default function SideBar({ }: Props) {
     }
     
     try {
-      getChats(null).then(() => {
-        getUserBots(null); 
-        getPublicBots(null);
-      });
+      if(token) {
+        getChats(null).then(() => {
+          getUserBots(null); 
+          getPublicBots(null);
+        });
+      }
     } catch (error) {
       console.error(error);
     }
