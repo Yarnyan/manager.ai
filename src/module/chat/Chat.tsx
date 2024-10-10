@@ -128,7 +128,7 @@ export default function Chat() {
           </div>
         </>
       </div>
-      <div className='w-full max-w-[1280px] p-4 fixed bottom-0'>
+      <div className='w-full max-w-[1280px] p-4 relative bottom-0'>
         <div className='flex items-center justify-center'>
           <input
             placeholder='Message'
