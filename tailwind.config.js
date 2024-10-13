@@ -23,5 +23,7 @@ export default {
       'sm': {'max': '639px'},
     }
   },
-  plugins: [],
+  plugins: [
+    require('tailwind-scrollbar'),
+  ],
 }

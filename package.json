@@ -31,6 +31,7 @@
     "react-signalr": "^0.2.23",
     "socket.io-client": "^4.8.0",
     "swiper": "^11.1.14",
+    "tailwind-scrollbar": "^3.1.0",
     "typewriter-effect": "^2.21.0",
     "usehooks-ts": "^3.1.0",
     "yup": "^1.4.0"

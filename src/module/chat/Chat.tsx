@@ -111,15 +111,15 @@ export default function Chat() {
   };
 
   return (
-    <div className='w-full h-full flex flex-col items-center'>
-      <div className='flex-1 w-full flex flex-col items-center overflow-y-auto p-2' ref={chatRef}>
+    <div className='w-full h-full flex flex-col items-center'> 
+      <div className='flex-1 w-full flex flex-col items-center p-2 sm:p-0' ref={chatRef}>
         <>
           <div className='flex flex-col items-center p-4'>
             <AvatarUser width={70} height={70} />
             <p className='text-s text-[var(--mutedTextColor)] font-normal mt-4 sm:text-center'>{bot?.botname}</p>
             <p className='text-[14px] text-[var(--mutedTextColor)] font-normal'>Author: @Root</p>
           </div>
-          <div className='flex flex-col w-full mt-4 max-w-3xl'>
+          <div className='flex flex-col w-full mt-4 max-w-3xl overflow-y-auto scrollbar-thin max-h-[calc(100dvh-350px)]' >
             {messages.length > 0 && messages.map((item, index) => (
               <div key={index} className={`${item.isFromUser ? 'w-full flex justify-start' : 'w-full flex justify-end'}`}>
                 <Message isFromUser={item.isFromUser} name={item.name} text={item.text} />
@@ -132,7 +132,7 @@ export default function Chat() {
         <div className='flex items-center justify-center'>
           <input
             placeholder='Message'
-            className='w-[60%] border-0 outline-0 p-[10px] h-[50px] text-[var(--textColor)] bg-[#303136] rounded-l sm:w-[80%]'
+            className='w-[60%] border-0 outline-0 p-[10px] h-[50px] text-[var(--textColor)] bg-[#303136] rounded-l sm:w-[90%]'
             onChange={(e) => setM(e.target.value)}
             value={m}
             onKeyDown={handleKeyDown}
