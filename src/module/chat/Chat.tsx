@@ -8,21 +8,23 @@ import { useLazyGetChatsQuery, useSendMessageMutation, useLazyGetAllMessageQuery
 import { isApiError } from '../../helpers/auth/apiError';
 import { useLocation } from 'react-router';
 import { chatHubUrl } from '../../api/routes/routes';
+
 export default function Chat() {
   const chatRef = useRef<HTMLDivElement>(null);
   const [messages, setMessages] = useState([]);
   const connectionRef = useRef<HubConnection | null>(null);
   const [m, setM] = useState('');
+  const [activeChatId, setActiveChatId] = useState<number | null>(null);
 
   const [getChats] = useLazyGetChatsQuery();
-
   const [getMessages, { isLoading }] = useLazyGetAllMessageQuery();
   const [sendMessage] = useSendMessageMutation();
-  const location = useLocation()
+  const location = useLocation();
   const token = localStorage.getItem('token');
   const bot = JSON.parse(localStorage.getItem('activePublicBot'));
-  const activeChat = JSON.parse(localStorage.getItem('activeChat'))
-  const user = JSON.parse(localStorage.getItem('user'));
+
+  // const activeChat = JSON.parse(localStorage.getItem('activeChat'));
+  // const user = JSON.parse(localStorage.getItem('user'));
 
   useEffect(() => {
     try {
@@ -30,8 +32,8 @@ export default function Chat() {
         const chatsData = res?.data || [];
         const matchedChat = chatsData.find(chat => chat.botId === bot?.id);
         if (matchedChat) {
+          setActiveChatId(matchedChat.id); 
           getMessages(matchedChat.id).then((data) => {
-            console.log(matchedChat.id)
             setMessages(data?.data?.detail || []);
           }).catch((error) => {
             console.error(error);
@@ -51,13 +53,11 @@ export default function Chat() {
       .configureLogging(LogLevel.Information)
       .build();
 
-    connection.start()
-      .then(() => console.log('Connection started'))
-    // .catch(error => console.log('Error establishing connection', error));
+    connection.start().then(() => console.log('Connection started'));
 
     connection.on('ReceiveMessage', (message: string, chatId: number, isFromUser: boolean) => {
-      if(chatId === activeChat?.id) {
-        setMessages((prevMessages: any) => [
+      if (chatId === activeChatId) { 
+        setMessages((prevMessages) => [
           ...prevMessages,
           {
             text: message,
@@ -74,7 +74,7 @@ export default function Chat() {
     return () => {
       connection.stop().then(() => console.log('Connection stopped'));
     };
-  }, []);
+  }, [activeChatId]);
 
   useEffect(() => {
     if (chatRef.current) {
@@ -95,6 +95,7 @@ export default function Chat() {
       text: message,
       name: 'You',
       isFromUser: true,
+      chatId: activeChatId, 
     };
 
     setMessages((prevMessages) => [...prevMessages, newMessage]);
@@ -116,20 +117,22 @@ export default function Chat() {
   };
 
   return (
-    <div className='w-full h-full flex flex-col items-center'> 
-      <div className='flex-1 w-full flex flex-col items-center p-2 sm:p-0'>
+    <div className='w-full h-full flex flex-col items-center'>
+      <div className='flex-1 w-full flex flex-col items-center p-2 max-h-[calc(100dvh-170px)] overflow-y-auto scrollbar-thin mt-4' ref={chatRef}>
         <>
           <div className='flex flex-col items-center p-4'>
             <AvatarUser width={70} height={70} />
             <p className='text-s text-[var(--mutedTextColor)] font-normal mt-4 sm:text-center'>{bot?.botname}</p>
             <p className='text-[14px] text-[var(--mutedTextColor)] font-normal'>Author: @Root</p>
           </div>
-          <div className='flex flex-col w-full mt-4 max-w-3xl overflow-y-auto scrollbar-thin max-h-[calc(100dvh-350px)]' ref={chatRef}>
-            {messages.length > 0 && messages.map((item, index) => (
-              <div key={index} className={`${item.isFromUser ? 'w-full flex justify-start' : 'w-full flex justify-end'}`}>
-                <Message isFromUser={item.isFromUser} name={item.name} text={item.text} />
-              </div>
-            ))}
+          <div className='flex flex-col w-full mt-4 max-w-3xl'>
+            {messages
+              .filter((msg) => msg.chatId === activeChatId) 
+              .map((item, index) => (
+                <div key={index} className={`${item.isFromUser ? 'w-full flex justify-start' : 'w-full flex justify-end'}`}>
+                  <Message isFromUser={item.isFromUser} name={item.name} text={item.text} />
+                </div>
+              ))}
           </div>
         </>
       </div>
@@ -148,6 +151,5 @@ export default function Chat() {
         </div>
       </div>
     </div>
-
   );
 }
