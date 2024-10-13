@@ -8,6 +8,7 @@ import { setActivePublicBot } from "../../../store/features/bots/botsSlice";
 import { useMediaQuery } from "usehooks-ts";
 import { MdDelete } from "react-icons/md";
 import { useRemoveBotMutation } from "../api/bot";
+import { useLazyGetChatsQuery } from "../../chat/api/chatApi";
 type Props = {
     image: string
     botname: string
@@ -24,11 +25,27 @@ export default function Helpers({ image, botname, description, id, prompt, type,
     
     const [deleteBot] = useRemoveBotMutation()
 
+    const [getChats, {data: chats}] = useLazyGetChatsQuery()
+
+
     const ha = () => {
-        dispatch(setActivePublicBot({ id, botname, description }))
-        navigate(`/chat/${botname}`)
-        localStorage.setItem('activePublicBot', JSON.stringify({ id: id, botname: botname, description: description}))
-    }
+        dispatch(setActivePublicBot({ id, botname, description }));
+        localStorage.setItem('activePublicBot', JSON.stringify({ id: id, botname: botname, description: description }));
+        try {
+          getChats(null).then((res: any) => {
+            if (res.data && id) {
+              const matchingChat = res.data.find((chat) => chat.botId === id);
+              if (matchingChat) {
+                localStorage.setItem('activeChat', JSON.stringify(matchingChat));
+              }
+            }
+          });
+        } catch (error) {
+          
+        } finally {
+          navigate(`/chat/${botname}`);
+        }
+      };
 
     const handleClick = () => {
         dispatch(addActiveBot({ botname, description, id, prompt, type }));
