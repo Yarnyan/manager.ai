@@ -8,6 +8,7 @@ import { useLocation } from 'react-router-dom';
 import { useLazyGetChatsQuery } from '../chat/api/chatApi';
 import { useLazyGetUserBotsQuery } from '../profile/api/user';
 import { useLazyGetPublicBotsQuery } from '../banners/api/banners';
+import { FaRegStar } from "react-icons/fa6";
 
 type Props = {}
 
@@ -20,7 +21,7 @@ export default function SideBar({ }: Props) {
   };
 
   const [token, setToken] = useState<boolean | null>(null);
-  
+
   const [getUserBots, botsResult] = useLazyGetUserBotsQuery();
   const [getChats, chatsResult] = useLazyGetChatsQuery();
   const [getPublicBots, publicBots] = useLazyGetPublicBotsQuery();
@@ -34,11 +35,11 @@ export default function SideBar({ }: Props) {
     } else {
       setToken(false);
     }
-    
+
     try {
-      if(token) {
+      if (token) {
         getChats(null).then(() => {
-          getUserBots(null); 
+          getUserBots(null);
           getPublicBots(null);
         });
       }
@@ -50,18 +51,18 @@ export default function SideBar({ }: Props) {
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
-        setIsOpen(false); 
+        setIsOpen(false);
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside); 
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside); 
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [sidebarRef]);
 
   const filteredBots = [
-    ...(botsResult.data || []), 
+    ...(botsResult.data || []),
     ...(publicBots.data || [])
   ].filter((bot: any) =>
     chatsResult.data?.some((chat: any) => chat.botId === bot.id) &&
@@ -83,16 +84,20 @@ export default function SideBar({ }: Props) {
             </button>
           </div>
           <Link to={'/create'} onClick={toggleSidebar} className='mt-4 text-s font-normal bg-[#26272b] h-[40px] rounded-2xl text-[var(--textColor)] hover:bg-[var(--hoverColor)] duration-300 flex items-center p-4 justify-center'>
-            <RiMagicLine />
+            <RiMagicLine size={20} />
             <p className='ml-1'>Create</p>
           </Link>
+          <Link to={"/tarrifs"} onClick={toggleSidebar} className='mt-2 text-s font-normal h-[40px] rounded-lg text-[var(--textColor)] bg-[#2E3036] hover:bg-[#4A4F54] duration-300 flex items-center p-4 justify-center border border-[var(--borderColor)]'>
+            <FaRegStar size={20} />
+            <p className='ml-1'>Tariffs</p>
+          </Link>
           <div>
-            <input 
-              type='text' 
-              placeholder='Search for chat rooms' 
-              className='border-0 outline-0 p-[10px] h-[40px] text-[var(--textColor)] bg-[#303136] rounded mt-4 w-full' 
+            <input
+              type='text'
+              placeholder='Search for chat rooms'
+              className='border-0 outline-0 p-[10px] h-[40px] text-[var(--textColor)] bg-[#303136] rounded mt-3 w-full'
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)} 
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
           <h1 className='mt-4 text-m font-normal text-[var(--mutedTextColor)]'>Your chats</h1>

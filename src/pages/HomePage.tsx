@@ -11,7 +11,7 @@ import Modal from '@mui/material/Modal';
 import BuilderModal from '../components/builder/builderModal';
 import { Helmet } from "react-helmet";
 import { generateHeadTags } from 'react-seo-tools/lib/generateHeadTags';
-export default function Home() {
+export default function HomePage() {
   const [regModalOpen, setRegModalOpen] = useState(false);
   const [logModalOpen, setLogModalOpen] = useState(false);
   const [builderModal, setBuilderModal] = useState(false);

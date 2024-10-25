@@ -50,6 +50,7 @@ body {
   position: relative;
   width: 100%;
   color: var(--textColor);
+  background-color: var(--bgColor);
 }
 
 .swiper-banners-button-prev,

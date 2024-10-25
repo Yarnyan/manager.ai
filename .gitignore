@@ -1,3 +1,4 @@
 node_modules/
 src/api/routes/routes.ts
 dist/
+.env

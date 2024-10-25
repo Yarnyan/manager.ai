@@ -7,6 +7,9 @@ import { Link } from 'react-router-dom';
 import { CiUser } from "react-icons/ci";
 import { IoIosLogOut } from "react-icons/io";
 import { useNavigate } from 'react-router-dom';
+import { Box } from '@mui/material';
+import { style } from './style/style';
+import { FaMoneyBillWave } from "react-icons/fa";
 type Props = {
   src?: string
 }
@@ -40,13 +43,18 @@ export default function AvatarContainer({ src }: Props) {
         onClose={handleClose}
         MenuListProps={{
           'aria-labelledby': 'basic-button',
-          sx: { backgroundColor: 'var(--bgElements)' }
+          sx: {
+            backgroundColor: 'var(--bgElements)',
+            padding: '0'
+          }
         }}
         PaperProps={{
           sx: {
+            width: '200px',
             mt: '30px',
             backgroundColor: 'var(--sideBarColor)',
             color: '#000',
+            padding: '0'
           }
         }}
         anchorOrigin={{
@@ -58,12 +66,14 @@ export default function AvatarContainer({ src }: Props) {
           horizontal: 'center',
         }}
       >
-        <MenuItem onClick={handleClose}>
-          <CiUser fill='var(--textColor)'/>
-          <Link to={`/profile`} className='ml-2 text-[var(--textColor)] text-m font-normal'>Profile</Link>
-        </MenuItem>
-        <MenuItem onClick={handleClose}>
-          <IoIosLogOut fill='var(--textColor)'/>
+        <Box sx={{ borderBottom: '1px solid #353B40' }}>
+          <MenuItem onClick={handleClose} sx={style}>
+            <CiUser fill='var(--textColor)' size={24} />
+            <Link to={`/profile`} className='ml-2 text-[var(--textColor)] text-x font-medium'>Profile</Link>
+          </MenuItem>
+        </Box>
+        <MenuItem onClick={handleClose} sx={style}>
+          <IoIosLogOut fill='var(--textColor)' size={24} />
           <button className='ml-2 text-[var(--textColor)] text-m font-normal' onClick={logout}>Logout</button>
         </MenuItem>
       </Menu>

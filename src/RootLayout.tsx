@@ -5,18 +5,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-        <body className="bg-[var(--bgColor)]">
-          <main className="flex relative">
-            <div className="absolute">
-              <SideBar />
-            </div>
-            <div className="w-full">
-              {children}
-            </div>
-          </main>
-        </body>
-    </html>
+    <main className="flex relative">
+      <div className="absolute">
+        <SideBar />
+      </div>
+      <div className="w-full">
+        {children}
+      </div>
+    </main>
   );
 }
 

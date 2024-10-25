@@ -7,7 +7,6 @@ import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signal
 import { useLazyGetChatsQuery, useSendMessageMutation, useLazyGetAllMessageQuery } from './api/chatApi';
 import { isApiError } from '../../helpers/auth/apiError';
 import { useLocation } from 'react-router';
-import { chatHubUrl } from '../../api/routes/routes';
 
 export default function Chat() {
   const chatRef = useRef<HTMLDivElement>(null);
@@ -47,7 +46,7 @@ export default function Chat() {
 
   useEffect(() => {
     const connection = new HubConnectionBuilder()
-      .withUrl(chatHubUrl, {
+      .withUrl(import.meta.env.VITE_API_URL + 'chat/hub', {
         accessTokenFactory: () => Promise.resolve(token || '')
       })
       .configureLogging(LogLevel.Information)

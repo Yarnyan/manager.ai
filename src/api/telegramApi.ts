@@ -1,10 +1,9 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { telegramApiUrl } from './routes/routes';
 import { baseQueryWithReauth } from './customBaseQuery/customBaseQuery';
 
 export const telegramApi = createApi({
   reducerPath: 'telegramApi',
-  baseQuery: baseQueryWithReauth(telegramApiUrl),
+  baseQuery: baseQueryWithReauth(import.meta.env.VITE_API_URL),
   tagTypes: ['Update', 'BotUpdate', 'Auth', 'Create'],
   endpoints: () => ({}),
 });
