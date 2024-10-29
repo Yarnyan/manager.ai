@@ -1,13 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
-import AvatarUser from '../../components/ui/Avatar';
+import AvatarUser from '../../../components/ui/Avatar';
 import Message from './components/Message';
 import { IoMdSend } from "react-icons/io";
-import Loader from '../../components/loader/Loader';
+import Loader from '../../../components/loader/Loader';
 import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import { useLazyGetChatsQuery, useSendMessageMutation, useLazyGetAllMessageQuery } from './api/chatApi';
-import { isApiError } from '../../helpers/auth/apiError';
+import { isApiError } from '../../../helpers/auth/apiError';
 import { useLocation } from 'react-router';
-import { chatHubUrl } from '../../api/routes/routes';
 export default function Chat() {
   const chatRef = useRef<HTMLDivElement>(null);
   const [messages, setMessages] = useState([]);
@@ -42,7 +41,7 @@ export default function Chat() {
 
   useEffect(() => {
     const connection = new HubConnectionBuilder()
-      .withUrl(chatHubUrl, {
+      .withUrl(import.meta.env.VITE_API_URL + 'chat/hub', {
         accessTokenFactory: () => Promise.resolve(token || '')
       })
       .configureLogging(LogLevel.Information)

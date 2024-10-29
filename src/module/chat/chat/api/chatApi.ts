@@ -1,6 +1,5 @@
-import { api } from "../../../api/api"
 import { IMessage } from "../entity/entity"
-import { chatApi } from "../../../api/chatApi"
+import { chatApi } from "../../../../api/chatApi"
 
 const socketApi = chatApi.injectEndpoints({
     endpoints: (build) => ({

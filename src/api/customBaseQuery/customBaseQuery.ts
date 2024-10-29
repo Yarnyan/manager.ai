@@ -18,8 +18,8 @@ export const baseQueryWithReauth = (baseUrl) => async (args, api, extraOptions) 
   let result = await customBaseQuery(baseUrl)(args, api, extraOptions);
 
   if (result.error && result.error.status === 401) {
-    localStorage.clear()
-    window.location.href = '/' 
+    // localStorage.clear()
+    // window.location.href = '/' 
   }
 
   return result;

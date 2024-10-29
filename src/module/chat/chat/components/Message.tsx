@@ -1,4 +1,4 @@
-import AvatarUser from '../../../components/ui/Avatar';
+import AvatarUser from '../../../../components/ui/Avatar';
 import Typewriter from 'typewriter-effect';
 
 type Props = {
