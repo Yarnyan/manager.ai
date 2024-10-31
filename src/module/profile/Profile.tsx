@@ -15,7 +15,6 @@ import Create from '../create/Create';
 import { useLazyGetChatsQuery } from '../chat/api/chatApi';
 import { useLazyGetUserBotsQuery } from './api/user';
 import { useLazyGetPublicBotsQuery } from '../banners/api/banners';
-import { useLazyGetSubQuery } from './api/user';
 
 type Props = {
     settingModal: () => void
@@ -31,7 +30,7 @@ export default function Profile({ settingModal, telegramModal }: Props) {
     const [getBots, { data: bots, isLoading }] = useLazyGetUserBotsQuery()
     const [getChats, chatsResult] = useLazyGetChatsQuery();
     const [getPublicBots, publicBots] = useLazyGetPublicBotsQuery();
-    const [getSubscribed, subscribedUser] = useLazyGetSubQuery()
+
     const handleClick = (button: 'helpers' | 'tasks') => {
         setActiveButton(button)
     }
@@ -50,7 +49,6 @@ export default function Profile({ settingModal, telegramModal }: Props) {
                 getPublicBots(null)
                 getBots(null)
             })
-            getSubscribed(null)
         } catch (error) {
 
         }
@@ -89,7 +87,6 @@ export default function Profile({ settingModal, telegramModal }: Props) {
         <div className="flex flex-col justify-center w-full items-center mt-40 sm:mt-8">
             <AvatarUser width={100} height={100} />
             <h1 className='text-2xl font-normal text-[var(--textColor)] text-center mt-4'>{user.data?.detail?.username}</h1>
-            <h1 className='text-l font-normal text-[var(--mutedTextColor)] text-center mt-2'>Your status: <span className='text-[var(--textColor)]'>{subscribedUser.data?.subscription.name}</span></h1>
             <div className='flex mt-4'>
                 <button className='flex items-center text-[#000000] duration-300 hover:bg-[#d3d3d6] bg-[#F5F5F5] rounded-2xl p-2' onClick={settingModal}>
                     <CiSettings fill='#000000' size={24} />
