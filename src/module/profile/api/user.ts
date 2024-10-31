@@ -38,9 +38,15 @@ const userApi = api.injectEndpoints({
                 method: 'GET',
             }),
             providesTags: ['BotUpdate'],
-        })
+        }),
+        getSub: build.query<any, any>({
+            query: (id) => ({
+                url: `/Subscription/getSub`,
+                method: 'GET',
+            }),
+        }), 
     }),
     overrideExisting: false,
 })
 
-export const { useLazyGetUserQuery, useUserUpdateMutation, useLazyGetUserBotsQuery, useUpdateBotMutation, useLazyGetBotDataQuery } = userApi
+export const { useLazyGetUserQuery, useUserUpdateMutation, useLazyGetUserBotsQuery, useUpdateBotMutation, useLazyGetBotDataQuery, useLazyGetSubQuery } = userApi
