@@ -3,7 +3,7 @@ import { baseQueryWithReauth } from './customBaseQuery/customBaseQuery';
 
 export const api = createApi({
   reducerPath: 'api',
-  baseQuery: baseQueryWithReauth('http://82.115.223.149:9999/' + 'api'),
+  baseQuery: baseQueryWithReauth(import.meta.env.VITE_API_URL + 'api'),
   tagTypes: ['Update', 'BotUpdate', 'Auth', 'Create'],
   endpoints: () => ({}),
 });

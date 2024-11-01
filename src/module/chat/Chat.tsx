@@ -22,9 +22,6 @@ export default function Chat() {
   const token = localStorage.getItem('token');
   const bot = JSON.parse(localStorage.getItem('activePublicBot'));
 
-  // const activeChat = JSON.parse(localStorage.getItem('activeChat'));
-  // const user = JSON.parse(localStorage.getItem('user'));
-
   useEffect(() => {
     try {
       getChats(null).then((res) => {
@@ -113,29 +110,27 @@ export default function Chat() {
     if (event.key === 'Enter') {
       handleSendMessage(m);
     }
-  };  
+  };
 
   return (
-    <div className='w-full h-full flex flex-col items-center max-h-[calc(100dvh - 42px)]' style={{maxHeight: "calc(100vh - 66px)" }}>
-      <div className='flex-1 w-full flex flex-col items-center p-2 overflow-y-auto scrollbar-thin mt-4' ref={chatRef}>
-        <>
-          <div className='flex flex-col items-center p-4'>
-            <AvatarUser width={70} height={70} />
-            <p className='text-s text-[var(--mutedTextColor)] font-normal mt-4 sm:text-center'>{bot?.botname}</p>
-            <p className='text-[14px] text-[var(--mutedTextColor)] font-normal'>Author: @Root</p>
-          </div>
-          <div className='flex flex-col w-full mt-4 max-w-3xl'>
-            {messages
-              .filter((msg) => msg.chatId === activeChatId)
-              .map((item, index) => (
-                <div key={index} className={`${item.isFromUser ? 'w-full flex justify-start' : 'w-full flex justify-end'}`}>
-                  <Message isFromUser={item.isFromUser} name={item.name} text={item.text} />
-                </div>
-              ))}
-          </div>
-        </>
+    <div className='flex flex-col h-full'>
+      <div className='flex-1 p-2 overflow-y-auto scrollbar-thin mt-4' ref={chatRef} style={{ maxHeight: 'calc(100dvh - 160px)' }}>
+        <div className='flex flex-col items-center p-4'>
+          <AvatarUser width={70} height={70} />
+          <p className='text-s text-[var(--mutedTextColor)] font-normal mt-4 sm:text-center'>{bot?.botname}</p>
+          <p className='text-[14px] text-[var(--mutedTextColor)] font-normal'>Author: @Root</p>
+        </div>
+        <div className='flex flex-col w-full mt-4 max-w-3xl'>
+          {messages
+            .filter((msg) => msg.chatId === activeChatId)
+            .map((item, index) => (
+              <div key={index} className={`${item.isFromUser ? 'w-full flex justify-start' : 'w-full flex justify-end'}`}>
+                <Message isFromUser={item.isFromUser} name={item.name} text={item.text} />
+              </div>
+            ))}
+        </div>
       </div>
-      <div className='w-full max-w-[1280px] p-4 relative bottom-0 sm:py-4 sm:px-0'>
+      <div className='fixed bottom-0 left-0 right-0 p-4'>
         <div className='flex items-center justify-center'>
           <input
             placeholder='Message'
