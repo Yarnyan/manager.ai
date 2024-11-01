@@ -113,7 +113,7 @@ export default function Chat() {
   };
 
   return (
-    <div className='flex flex-col h-full'>
+    <div className='w-full h-full flex flex-col items-center'>
       <div className='flex-1 p-2 overflow-y-auto scrollbar-thin mt-4' ref={chatRef} style={{ maxHeight: 'calc(100dvh - 160px)' }}>
         <div className='flex flex-col items-center p-4'>
           <AvatarUser width={70} height={70} />
@@ -130,7 +130,7 @@ export default function Chat() {
             ))}
         </div>
       </div>
-      <div className='fixed bottom-0 left-0 right-0 p-4'>
+      <div className='fixed bottom-0 p-4 max w-full max-w-[1280px]'>
         <div className='flex items-center justify-center'>
           <input
             placeholder='Message'
