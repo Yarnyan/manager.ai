@@ -87,7 +87,7 @@ export default function Profile({ settingModal, telegramModal }: Props) {
 
 
       return (
-        <div className="flex flex-col justify-center w-full items-center mt-40 sm:mt-8">
+        <div className="flex flex-col justify-center w-full items-center mt-32 sm:mt-8">
             <AvatarUser width={100} height={100} />
             <h1 className='text-2xl font-normal text-[var(--textColor)] text-center mt-4'>{user.data?.detail?.username}</h1>
             <h1 className='text-l font-normal text-[var(--mutedTextColor)] text-center mt-2'>Your status: <span className='text-[var(--textColor)]'>{subscribedUser.data?.subscription.name}</span></h1>
