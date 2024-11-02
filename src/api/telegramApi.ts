@@ -3,7 +3,7 @@ import { baseQueryWithReauth } from './customBaseQuery/customBaseQuery';
 
 export const telegramApi = createApi({
   reducerPath: 'telegramApi',
-  baseQuery: baseQueryWithReauth(import.meta.env.VITE_API_URL + 'api/telegram'),
+  baseQuery: baseQueryWithReauth(import.meta.env.VITE_API_URL),
   tagTypes: ['Update', 'BotUpdate', 'Auth', 'Create'],
   endpoints: () => ({}),
 });
