@@ -15,6 +15,10 @@
   --borderColor: #26272b;
 }
 
+input:focus {
+  outline: none;
+}
+
 /* Стиль для прокрутки в веб-кит браузерах */
 ::-webkit-scrollbar {
   width: 12px;

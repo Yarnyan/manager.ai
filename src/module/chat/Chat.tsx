@@ -22,16 +22,13 @@ export default function Chat() {
   const token = localStorage.getItem('token');
   const bot = JSON.parse(localStorage.getItem('activePublicBot'));
 
-  // const activeChat = JSON.parse(localStorage.getItem('activeChat'));
-  // const user = JSON.parse(localStorage.getItem('user'));
-
   useEffect(() => {
     try {
       getChats(null).then((res) => {
         const chatsData = res?.data || [];
         const matchedChat = chatsData.find(chat => chat.botId === bot?.id);
         if (matchedChat) {
-          setActiveChatId(matchedChat.id); 
+          setActiveChatId(matchedChat.id);
           getMessages(matchedChat.id).then((data) => {
             setMessages(data?.data?.detail || []);
           }).catch((error) => {
@@ -55,7 +52,7 @@ export default function Chat() {
     connection.start().then(() => console.log('Connection started'));
 
     connection.on('ReceiveMessage', (message: string, chatId: number, isFromUser: boolean) => {
-      if (chatId === activeChatId) { 
+      if (chatId === activeChatId) {
         setMessages((prevMessages) => [
           ...prevMessages,
           {
@@ -94,7 +91,7 @@ export default function Chat() {
       text: message,
       name: 'You',
       isFromUser: true,
-      chatId: activeChatId, 
+      chatId: activeChatId,
     };
 
     setMessages((prevMessages) => [...prevMessages, newMessage]);
@@ -117,34 +114,35 @@ export default function Chat() {
 
   return (
     <div className='w-full h-full flex flex-col items-center'>
-      <div className='flex-1 w-full flex flex-col items-center p-2 max-h-[calc(100dvh-170px)] overflow-y-auto scrollbar-thin mt-4' ref={chatRef}>
-        <>
-          <div className='flex flex-col items-center p-4'>
-            <AvatarUser width={70} height={70} />
-            <p className='text-s text-[var(--mutedTextColor)] font-normal mt-4 sm:text-center'>{bot?.botname}</p>
-            <p className='text-[14px] text-[var(--mutedTextColor)] font-normal'>Author: @Root</p>
-          </div>
-          <div className='flex flex-col w-full mt-4 max-w-3xl'>
-            {messages
-              .filter((msg) => msg.chatId === activeChatId) 
-              .map((item, index) => (
-                <div key={index} className={`${item.isFromUser ? 'w-full flex justify-start' : 'w-full flex justify-end'}`}>
-                  <Message isFromUser={item.isFromUser} name={item.name} text={item.text} />
-                </div>
-              ))}
-          </div>
-        </>
+      <div className='flex-1 p-2 overflow-y-auto scrollbar-thin mt-4 w-full' ref={chatRef} style={{ maxHeight: 'calc(100dvh - 160px)', maxWidth: '784px' }}>
+        <div className='flex flex-col items-center p-4'>
+          <AvatarUser width={70} height={70} />
+          <p className='text-s text-[var(--mutedTextColor)] font-normal mt-4 sm:text-center'>{bot?.botname}</p>
+          <p className='text-[14px] text-[var(--mutedTextColor)] font-normal'>Author: @Root</p>
+        </div>
+        <div className='flex flex-col w-full mt-4 max-w-3xl'>
+          {messages
+            .filter((msg) => msg.chatId === activeChatId)
+            .map((item, index) => (
+              <div key={index} className={`${item.isFromUser ? 'w-full flex justify-start' : 'w-full flex justify-end'}`}>
+                <Message isFromUser={item.isFromUser} name={item.name} text={item.text} />
+              </div>
+            ))}
+        </div>
       </div>
-      <div className='w-full max-w-[1280px] p-4 relative bottom-0'>
+      <div className='fixed bottom-0 p-4 max w-full max-w-[1280px]'>
         <div className='flex items-center justify-center'>
           <input
             placeholder='Message'
-            className='w-[60%] border-0 outline-0 p-[10px] h-[50px] text-[var(--textColor)] bg-[#303136] rounded-l sm:w-[90%]'
+            className='w-[60%] border-0 outline-0 p-[10px] h-[50px] text-[var(--textColor)] bg-[#303136] rounded-l sm:w-[98%]'
             onChange={(e) => setM(e.target.value)}
             value={m}
             onKeyDown={handleKeyDown}
           />
-          <div className='bg-[#303136] rounded-r cursor-pointer w-[40px] h-[50px] flex items-center justify-center' onClick={() => handleSendMessage(m)}>
+          <div
+            className='bg-[#303136] rounded-r cursor-pointer w-[40px] h-[50px] flex items-center justify-center'
+            onClick={() => handleSendMessage(m)}
+          >
             <IoMdSend fill='#F5F5F5' size={20} />
           </div>
         </div>

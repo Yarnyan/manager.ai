@@ -25,7 +25,7 @@ export default function Message({ text, name, isFromUser }: Props) {
         <AvatarUser width={30} height={30} src={''} />
         <p className='text-[var(--textColor)] font-normal ml-2 mr-2 text-[14px]'>{name ? name : alter}</p>
       </div>
-      <div className='w-full mt-2 bg-[#303136] p-4 rounded-lg'>
+      <div className='w-full mt-2 bg-[#303136] p-4 rounded-lg break-all'>
         {renderMessage()}
       </div>
     </div>

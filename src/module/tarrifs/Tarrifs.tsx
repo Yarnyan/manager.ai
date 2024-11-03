@@ -22,7 +22,7 @@ export default function Tarrifs({ }: Props) {
   return (
     <div className="w-full sm:justify-center">
       <div className='flex mt-4 align-center justify-between w-full flex-wrap sm:items-center sm:justify-center'>
-        {subs.data?.map((tarrif: any) => {
+        {subs.data?.map((tarrif: ITarrif) => {
           return (
             <Tarrif id={tarrif.id} name={tarrif.name} price={tarrif.price} description={tarrif.description} key={tarrif.id} />
           )

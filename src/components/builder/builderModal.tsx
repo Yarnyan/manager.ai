@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, forwardRef } from 'react';
 import { Box } from '@mui/material';
 import { styleModal } from '../modal/modal';
 import { IoMdClose } from "react-icons/io";
@@ -16,7 +16,7 @@ type Inputs = {
   [key: string]: string | undefined;
 };
 
-const BuilderModal = ({ onCloseBuilderModal }: Props) => {
+const BuilderModal = forwardRef<HTMLDivElement, Props>(({ onCloseBuilderModal }, ref) => {
   const [error, setError] = useState('');
   const [bot, setBot] = useState<any>(null);
   const [fields, setFields] = useState<Array<{ type: string, name: string, label: string, options?: string[] }>>([]);
@@ -137,6 +137,6 @@ const BuilderModal = ({ onCloseBuilderModal }: Props) => {
       {error && <p className='text-red-500 text-l mt-[10px] text-center'>{error}</p>}
     </Box>
   );
-};
+})
 
 export default BuilderModal;

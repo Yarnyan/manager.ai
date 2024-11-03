@@ -71,7 +71,7 @@ export default function Helpers({ image, botname, description, id, prompt, type,
     const to = !mobile ? 24 : 100
     
     return (
-        <div className='mt-4 flex p-2 hover:bg-[#414142] rounded duration-300 w-[400px] justify-between sm:w-[100%] cursor-pointer'>
+        <div className='mt-4 flex p-2 hover:bg-[#414142] rounded duration-300 w-[400px] justify-between sm:w-[100%] cursor-pointer items-center'>
             <div className='flex w-full' onClick={() => ha()}>
                 <img alt='helpers' src={image === '' ? "https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI=" : image} width={60} height={60} className='rounded-md h-[60px]' />
                 <div className='ml-4 w-full'>

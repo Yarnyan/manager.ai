@@ -116,7 +116,7 @@ export default function SideBar({ }: Props) {
               <BiMenuAltLeft className='h-[32px] w-[32px] fill-[var(--iconColor)]' />
             </button>
           ) : (
-            <h1 className='text-xl font-normal text-[var(--textColor)] mt-2 ml-4 sm:ml-0'>Manager.ai</h1>
+            <Link className='text-xl font-normal text-[var(--textColor)] mt-2 ml-4 sm:ml-0' to={'/'} >Manager.ai</Link>
           )}
         </div>
       </div>
