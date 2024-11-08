@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useAppDispatch } from "../../store/hooks"
 import { setActivePublicBot } from "../../store/features/bots/botsSlice"
-import { formatText } from '../../helpers/formatText'
+import { formatText } from '../../helpers/text/formatText'
 type Props = {
     id: number,
     img: string

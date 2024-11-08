@@ -1,7 +1,7 @@
 import { useAppDispatch } from "../../store/hooks"
 import { setActivePublicBot } from "../../store/features/bots/botsSlice"
 import { useMediaQuery } from "usehooks-ts";
-import { formatText } from "../../helpers/formatText";
+import { formatText } from "../../helpers/text/formatText";
 import { TbPlugConnected } from "react-icons/tb";
 type Props = {
   id?: number

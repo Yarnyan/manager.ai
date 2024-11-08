@@ -3,8 +3,8 @@ import { Box, CircularProgress } from '@mui/material';
 import { styleModal } from '../modal/modal';
 import { IoMdClose } from "react-icons/io";
 import { useLazyGetStatusQuery } from '../../module/profile/api/bot';
-import AutomaticConnection from './automaticConnection';
-import ManualСonnection from './manualСonnection';
+import AutomaticConnection from './AutomaticConnection';
+import ManualСonnection from './ManualСonnection';
 
 type Props = {
     onClosetelegramModal: () => void;
@@ -54,7 +54,7 @@ const SettingModal = forwardRef<HTMLDivElement, Props>(({ onClosetelegramModal }
             </div>
             <div className='w-full flex justify-center items-center'>
                 <button onClick={() => setConnectionType('automatic')} className={`px-2 py-2 transition-all duration-300 ${connectionType === 'automatic' ? 'text-white' : 'text-gray-600 hover:text-white'}`}>
-                    Automatic
+                    Demo
                 </button>
 
                 <button onClick={() => setConnectionType('manual')} className={`px-2 py-2 rounded-lg transition-all duration-300 ${connectionType === 'manual' ? 'text-white' : 'text-gray-600 hover:text-white'}`}>

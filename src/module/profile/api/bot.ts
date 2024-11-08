@@ -28,9 +28,21 @@ const botApi = telegramApi.injectEndpoints({
                 body: data,
             }),
             invalidatesTags: ['BotUpdate'],
+        }),
+        getAccounts: build.query<any, any>({
+            query: () => ({
+                url: 'api/telegram/getAccounts',
+            }),
+        }),
+        addBotWithAccount: build.mutation<any, any>({
+            query: (data) => ({
+                url: 'api/telegram/addBotWithAccount',
+                method: 'POST',
+                body: data,
+            }),
         })
     }),
     overrideExisting: false,
 })
 
-export const { useLazyGetStatusQuery, useAddTelegtamBotMutation, useAuthBotMutation, useRemoveBotMutation } = botApi
+export const { useLazyGetStatusQuery, useAddTelegtamBotMutation, useAuthBotMutation, useRemoveBotMutation, useLazyGetAccountsQuery, useAddBotWithAccountMutation } = botApi

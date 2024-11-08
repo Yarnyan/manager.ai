@@ -119,9 +119,9 @@ const CreateForm = ({ }) => {
                         {loading ? <CircularProgress size={30} sx={{color: 'black'}} /> : 'Create manager'}
                     </button>
                 </div>
-                {error && <p className='text-red-500 text-l mt-[10px] text-center'>{error}</p>}
+                {error && <p className='text-red-500 text-l text-center'>{error}</p>}
             </form>
-            <Snackbar open={open} autoHideDuration={3000} onClose={handleClose} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+            {/* <Snackbar open={open} autoHideDuration={3000} onClose={handleClose} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
                 <Alert
                     onClose={handleClose}
                     severity="success"
@@ -130,7 +130,7 @@ const CreateForm = ({ }) => {
                 >
                     Bot successfully created
                 </Alert>
-            </Snackbar>
+            </Snackbar> */}
         </div>
     );
 };

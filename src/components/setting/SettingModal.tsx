@@ -30,7 +30,6 @@ const SettingModal = forwardRef<HTMLDivElement, Props>(({ onCloseSettingModal },
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const [error, setError] = useState('');
-  const [open, setOpen] = useState(false);
   const [updateUser] = useUserUpdateMutation();
 
   const user = useAppSelector((state) => state.user);
@@ -59,15 +58,15 @@ const SettingModal = forwardRef<HTMLDivElement, Props>(({ onCloseSettingModal },
       formData.append("email", data.email);
       formData.append("password", data.password);
       formData.append("username", data.username);
-      const response = updateUser(formData).unwrap();
-      reset();
-      setOpen(true);
+      const response = updateUser(formData)
     } catch (error) {
       if (isApiError(error)) {
         setError(error.data.message);
       } else {
         setError('Error signing in');
       }
+    } finally {
+      onCloseSettingModal();
     }
   };
 
@@ -82,14 +81,6 @@ const SettingModal = forwardRef<HTMLDivElement, Props>(({ onCloseSettingModal },
   //     fileInputRef.current.click();
   //   }
   // };
-
-  const handleClose = (_event: React.SyntheticEvent | Event, reason?: SnackbarCloseReason) => {
-    if (reason === 'clickaway') {
-        return;
-    }
-
-    setOpen(false);
-};
 
   return (
     <Box ref={ref} sx={{ ...styleModal }} tabIndex={0}>
