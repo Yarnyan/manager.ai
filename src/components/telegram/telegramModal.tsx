@@ -10,37 +10,37 @@ type Props = {
     onClosetelegramModal: () => void;
 };
 
-type Inputs = {
-    Phone?: string;
-    Key?: string;
-    Hash?: string;
-    Code?: string;
-    onClosetelegramModal?: () => void;
-};
-
 const SettingModal = forwardRef<HTMLDivElement, Props>(({ onClosetelegramModal }, ref) => {
-    const [statusBot, setStatusBot] = useState(null);
 
-    const [getStatus, { isLoading: isGetStatusLoading }] = useLazyGetStatusQuery();
+    const [statusBot, setStatusBot] = useState<boolean | null>(null);
 
     const [connectionType, setConnectionType] = useState('automatic');
 
+    const [ getStatus ] = useLazyGetStatusQuery();
+
     const bot = JSON.parse(localStorage.getItem('activePublicBot') || '{}');
 
+    const [loading, setLoading] = useState<boolean>(false);
+
     useEffect(() => {
-        getStatus(bot.id).then((res) => {
-            setStatusBot(res.data.detail);
-        });
+        setLoading(true);
+        const fetchData = async () => {
+            try {
+                const res = await getStatus(bot.id);
+                setStatusBot(res.data.detail);
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setLoading(false);
+            }
+        };
+    
+        fetchData();
     }, [getStatus, bot.id]);
+    
 
-    const isLoading = isGetStatusLoading;
-
-    const handleConnection = () => {
-        if (connectionType === 'automatic') {
-            return <AutomaticConnection />
-        } else {
-            return <ManualСonnection />
-        }
+    const renderConnectionComponent = () => {
+        return connectionType === 'automatic' ? <AutomaticConnection /> : <ManualСonnection />;
     }
 
     return (
@@ -53,22 +53,25 @@ const SettingModal = forwardRef<HTMLDivElement, Props>(({ onClosetelegramModal }
                 <p className='text-xl text-[var(--mutedTextColor)] font-[100] text-center mt-[12px]'>Telegram connect</p>
             </div>
             <div className='w-full flex justify-center items-center'>
-                <button onClick={() => setConnectionType('automatic')} className={`px-2 py-2 transition-all duration-300 ${connectionType === 'automatic' ? 'text-white' : 'text-gray-600 hover:text-white'}`}>
+                <button
+                    onClick={() => setConnectionType('automatic')}
+                    className={`px-2 py-2 transition-all duration-300 ${connectionType === 'automatic' ? 'text-white' : 'text-gray-600 hover:text-white'}`}>
                     Demo
                 </button>
-
-                <button onClick={() => setConnectionType('manual')} className={`px-2 py-2 rounded-lg transition-all duration-300 ${connectionType === 'manual' ? 'text-white' : 'text-gray-600 hover:text-white'}`}>
+                <button
+                    onClick={() => setConnectionType('manual')}
+                    className={`px-2 py-2 rounded-lg transition-all duration-300 ${connectionType === 'manual' ? 'text-white' : 'text-gray-600 hover:text-white'}`}>
                     Manual
                 </button>
             </div>
-            {isLoading ? (
+            {loading ? (
                 <div className='flex justify-center items-center'>
                     <CircularProgress />
                 </div>
             ) : (
                 <>
                     {statusBot === false ? (
-                        handleConnection()
+                        renderConnectionComponent()
                     ) : (
                         <p className='text-xl text-green-500 font-[100] text-center mt-[12px]'>The bot is connected</p>
                     )}

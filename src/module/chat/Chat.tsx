@@ -14,6 +14,7 @@ export default function Chat() {
   const connectionRef = useRef<HubConnection | null>(null);
   const [m, setM] = useState('');
   const [activeChatId, setActiveChatId] = useState<number | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const [getChats] = useLazyGetChatsQuery();
   const [getMessages, { isLoading }] = useLazyGetAllMessageQuery();
@@ -23,22 +24,24 @@ export default function Chat() {
   const bot = JSON.parse(localStorage.getItem('activePublicBot'));
 
   useEffect(() => {
-    try {
-      getChats(null).then((res) => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const res = await getChats(null);
         const chatsData = res?.data || [];
         const matchedChat = chatsData.find(chat => chat.botId === bot?.id);
         if (matchedChat) {
           setActiveChatId(matchedChat.id);
-          getMessages(matchedChat.id).then((data) => {
-            setMessages(data?.data?.detail || []);
-          }).catch((error) => {
-            console.error(error);
-          });
+          const data = await getMessages(matchedChat.id);
+          setMessages(data?.data?.detail || []);
         }
-      });
-    } catch (error) {
-      console.log(isApiError(error));
-    }
+      } catch (error) {
+        console.log(isApiError(error));
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
   }, [location]);
 
   useEffect(() => {
@@ -78,7 +81,7 @@ export default function Chat() {
     }
   }, [messages]);
 
-  if (isLoading) {
+  if (loading) {
     return <Loader />;
   }
 
